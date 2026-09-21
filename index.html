@@ -1,2995 +1,1471 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta
+  <meta charset="UTF-8" />
+  <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
 
-<meta
-    name="theme-color"
-    content="#0f172a">
+  <title>Vehicle Completion Tracker</title>
 
-<title>
-    Vehicle Completion Tracker
-</title>
-
-
-<style>
-
-/* =========================================================
-   ROOT
-========================================================= */
-
-:root {
-
-    --bg: #f4f7fb;
-
-    --surface: #ffffff;
-
-    --surface-soft: #f8fafc;
-
-    --text: #172033;
-
-    --muted: #64748b;
-
-    --border: #e2e8f0;
-
-    --primary: #2563eb;
-
-    --primary-dark: #1d4ed8;
-
-    --green: #16a34a;
-
-    --green-dark: #166534;
-
-    --green-soft: #ecfdf5;
-
-    --red: #dc2626;
-
-    --red-dark: #991b1b;
-
-    --red-soft: #fef2f2;
-
-    --orange: #ea580c;
-
-    --blue-soft: #eff6ff;
-
-    --shadow:
-        0 12px 35px rgba(15, 23, 42, 0.07);
-
-    --radius: 18px;
-
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-* {
-
-    box-sizing: border-box;
-
-}
-
-
-html {
-
-    scroll-behavior: smooth;
-
-}
-
-
-body {
-
-    margin: 0;
-
-    min-height: 100vh;
-
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-
-    background:
-        var(--bg);
-
-    color:
-        var(--text);
-
-}
-
-
-button,
-input,
-select,
-textarea {
-
-    font: inherit;
-
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-.login-screen {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #172554,
-            #1e3a8a
-        );
-
-}
-
-
-.login-card {
-
-    width:
-        min(430px, 100%);
-
-    background:
-        rgba(255,255,255,.98);
-
-    border-radius:
-        24px;
-
-    padding:
-        30px;
-
-    box-shadow:
-        0 30px 90px rgba(0,0,0,.30);
-
-}
-
-
-.login-logo {
-
-    width: 60px;
-
-    height: 60px;
-
-    display: grid;
-
-    place-items: center;
-
-    margin-bottom: 18px;
-
-    border-radius: 17px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #1e40af
-        );
-
-    font-size: 30px;
-
-}
-
-
-.login-card h1 {
-
-    margin:
-        0 0 7px;
-
-    font-size: 24px;
-
-}
-
-
-.login-card p {
-
-    margin:
-        0 0 25px;
-
-    color:
-        var(--muted);
-
-    font-size: 13px;
-
-    line-height: 1.5;
-
-}
-
-
-.login-field {
-
-    margin-bottom: 14px;
-
-}
-
-
-.login-field label {
-
-    display: block;
-
-    margin-bottom: 6px;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-}
-
-
-.login-field input {
-
-    width: 100%;
-
-    padding: 12px 13px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 11px;
-
-    outline: none;
-
-    background:
-        var(--surface-soft);
-
-}
-
-
-.login-field input:focus {
-
-    border-color:
-        var(--primary);
-
-    background:
-        white;
-
-}
-
-
-.login-button {
-
-    width: 100%;
-
-    margin-top: 8px;
-
-    padding: 13px;
-
-    border: 0;
-
-    border-radius: 11px;
-
-    background:
-        var(--primary);
-
-    color: white;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-}
-
-
-.login-button:hover {
-
-    background:
-        var(--primary-dark);
-
-}
-
-
-.login-error {
-
-    display: none;
-
-    margin-top: 13px;
-
-    padding: 10px;
-
-    border-radius: 10px;
-
-    background:
-        var(--red-soft);
-
-    color:
-        var(--red-dark);
-
-    font-size: 12px;
-
-}
-
-
-.login-error.show {
-
-    display: block;
-
-}
-
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading-screen {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 10000;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background:
-        rgba(15,23,42,.65);
-
-    backdrop-filter:
-        blur(5px);
-
-}
-
-
-.loading-screen.show {
-
-    display: flex;
-
-}
-
-
-.loader-card {
-
-    background:
-        white;
-
-    padding:
-        25px 35px;
-
-    border-radius:
-        18px;
-
-    text-align:
-        center;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-
-.spinner {
-
-    width: 35px;
-
-    height: 35px;
-
-    margin:
-        0 auto 12px;
-
-    border:
-        4px solid #dbeafe;
-
-    border-top-color:
-        var(--primary);
-
-    border-radius:
-        50%;
-
-    animation:
-        spin .8s linear infinite;
-
-}
-
-
-@keyframes spin {
-
-    to {
-
-        transform:
-            rotate(360deg);
-
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-#app {
-
-    display: none;
-
-    min-height: 100vh;
-
-}
-
-
-#app.visible {
-
-    display: flex;
-
-    flex-direction: column;
-
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.header {
-
-    position: sticky;
-
-    top: 0;
-
-    z-index: 500;
-
-    color: white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #1e3a8a
-        );
-
-    box-shadow:
-        0 5px 25px rgba(15,23,42,.18);
-
-}
-
-
-.header-inner {
-
-    width:
-        min(1600px, 100%);
-
-    margin:
-        auto;
-
-    padding:
-        15px 20px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        20px;
-
-}
-
-
-.brand {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        12px;
-
-}
-
-
-.brand-icon {
-
-    width:
-        45px;
-
-    height:
-        45px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    border-radius:
-        13px;
-
-    background:
-        rgba(255,255,255,.12);
-
-    font-size:
-        22px;
-
-}
-
-
-.brand h1 {
-
-    margin:
-        0;
-
-    font-size:
-        19px;
-
-}
-
-
-.brand p {
-
-    margin:
-        3px 0 0;
-
-    font-size:
-        11px;
-
-    color:
-        rgba(255,255,255,.7);
-
-}
-
-
-.user-area {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-}
-
-
-.user-info {
-
-    text-align:
-        right;
-
-}
-
-
-.user-name {
-
-    font-size:
-        12px;
-
-    font-weight:
-        800;
-
-}
-
-
-.user-email {
-
-    font-size:
-        10px;
-
-    color:
-        rgba(255,255,255,.65);
-
-}
-
-
-.logout-btn {
-
-    border:
-        1px solid rgba(255,255,255,.18);
-
-    background:
-        rgba(255,255,255,.10);
-
-    color:
-        white;
-
-    border-radius:
-        10px;
-
-    padding:
-        9px 12px;
-
-    cursor:
-        pointer;
-
-    font-size:
-        11px;
-
-}
-
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.main {
-
-    width:
-        min(1600px, 100%);
-
-    margin:
-        auto;
-
-    padding:
-        20px;
-
-    flex:
-        1;
-
-}
-
-
-.workspace {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        minmax(310px, 36%)
-        minmax(0, 64%);
-
-    gap:
-        20px;
-
-    align-items:
-        start;
-
-}
-
-
-/* =========================================================
-   PANEL
-========================================================= */
-
-.panel {
-
-    background:
-        var(--surface);
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        var(--radius);
-
-    box-shadow:
-        var(--shadow);
-
-    overflow:
-        hidden;
-
-}
-
-
-.panel-header {
-
-    padding:
-        17px 20px;
-
-    border-bottom:
-        1px solid var(--border);
-
-}
-
-
-.panel-title h2 {
-
-    margin:
-        0;
-
-    font-size:
-        16px;
-
-}
-
-
-.panel-title p {
-
-    margin:
-        4px 0 0;
-
-    color:
-        var(--muted);
-
-    font-size:
-        11px;
-
-}
-
-
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-.calendar-panel {
-
-    position:
-        sticky;
-
-    top:
-        82px;
-
-}
-
-
-.calendar-controls {
-
-    padding:
-        13px 20px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    border-bottom:
-        1px solid var(--border);
-
-}
-
-
-.month-title {
-
-    font-size:
-        16px;
-
-    font-weight:
-        800;
-
-}
-
-
-.icon-button {
-
-    width:
-        35px;
-
-    height:
-        35px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        10px;
-
-    background:
-        white;
-
-    cursor:
-        pointer;
-
-}
-
-
-.icon-button:hover {
-
-    background:
-        #f1f5f9;
-
-}
-
-
-.calendar {
-
-    padding:
-        14px;
-
-}
-
-
-.weekdays,
-.calendar-grid {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap:
-        5px;
-
-}
-
-
-.weekday {
-
-    padding:
-        6px 0;
-
-    text-align:
-        center;
-
-    font-size:
-        9px;
-
-    font-weight:
-        800;
-
-    color:
-        var(--muted);
-
-}
-
-
-.calendar-day {
-
-    min-height:
-        52px;
-
-    position:
-        relative;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border:
-        1px solid transparent;
-
-    border-radius:
-        12px;
-
-    cursor:
-        pointer;
-
-    transition:
-        .15s;
-
-}
-
-
-.calendar-day.incomplete {
-
-    background:
-        var(--red-soft);
-
-    color:
-        var(--red-dark);
-
-}
-
-
-.calendar-day.complete {
-
-    background:
-        var(--green-soft);
-
-    color:
-        var(--green-dark);
-
-}
-
-
-.calendar-day:hover {
-
-    transform:
-        translateY(-2px);
-
-    border-color:
-        #cbd5e1;
-
-}
-
-
-.calendar-day.selected {
-
-    outline:
-        3px solid rgba(37,99,235,.18);
-
-    border-color:
-        var(--primary);
-
-}
-
-
-.calendar-day.today {
-
-    box-shadow:
-        inset 0 0 0 2px var(--primary);
-
-}
-
-
-.calendar-day.disabled {
-
-    opacity:
-        .25;
-
-    cursor:
-        not-allowed;
-
-}
-
-
-.calendar-day.empty {
-
-    cursor:
-        default;
-
-}
-
-
-.calendar-day.empty:hover {
-
-    transform:
-        none;
-
-    border-color:
-        transparent;
-
-}
-
-
-.day-number {
-
-    font-size:
-        13px;
-
-    font-weight:
-        800;
-
-}
-
-
-.day-status {
-
-    margin-top:
-        3px;
-
-    font-size:
-        8px;
-
-    font-weight:
-        800;
-
-}
-
-
-.day-dot {
-
-    position:
-        absolute;
-
-    bottom:
-        5px;
-
-    width:
-        5px;
-
-    height:
-        5px;
-
-    border-radius:
-        50%;
-
-}
-
-
-.complete .day-dot {
-
-    background:
-        var(--green);
-
-}
-
-
-.incomplete .day-dot {
-
-    background:
-        var(--red);
-
-}
-
-
-.legend {
-
-    padding:
-        0 20px 17px;
-
-    display:
-        flex;
-
-    flex-wrap:
-        wrap;
-
-    gap:
-        14px;
-
-    color:
-        var(--muted);
-
-    font-size:
-        10px;
-
-}
-
-
-.legend-item {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        6px;
-
-}
-
-
-.legend-color {
-
-    width:
-        9px;
-
-    height:
-        9px;
-
-    border-radius:
-        50%;
-
-}
-
-
-.legend-green {
-
-    background:
-        var(--green);
-
-}
-
-
-.legend-red {
-
-    background:
-        var(--red);
-
-}
-
-
-/* =========================================================
-   DETAILS
-========================================================= */
-
-.detail-header {
-
-    padding:
-        18px 20px;
-
-    border-bottom:
-        1px solid var(--border);
-
-}
-
-
-.selected-date {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        15px;
-
-}
-
-
-.selected-date h2 {
-
-    margin:
-        0;
-
-    font-size:
-        20px;
-
-}
-
-
-.selected-date p {
-
-    margin:
-        4px 0 0;
-
-    color:
-        var(--muted);
-
-    font-size:
-        11px;
-
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-.summary {
-
-    padding:
-        14px 20px;
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:
-        9px;
-
-}
-
-
-.summary-card {
-
-    padding:
-        11px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        12px;
-
-    background:
-        var(--surface-soft);
-
-}
-
-
-.summary-label {
-
-    color:
-        var(--muted);
-
-    font-size:
-        9px;
-
-    font-weight:
-        800;
-
-    text-transform:
-        uppercase;
-
-}
-
-
-.summary-value {
-
-    margin-top:
-        3px;
-
-    font-size:
-        19px;
-
-    font-weight:
-        850;
-
-}
-
-
-.summary-card.completed
-.summary-value {
-
-    color:
-        var(--green);
-
-}
-
-
-.summary-card.pending
-.summary-value {
-
-    color:
-        var(--red);
-
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-.progress-wrapper {
-
-    padding:
-        0 20px 15px;
-
-}
-
-
-.progress-info {
-
-    display:
-        flex;
-
-    justify-content:
-        space-between;
-
-    margin-bottom:
-        6px;
-
-    color:
-        var(--muted);
-
-    font-size:
-        10px;
-
-}
-
-
-.progress-bar {
-
-    height:
-        8px;
-
-    border-radius:
-        999px;
-
-    background:
-        #e2e8f0;
-
-    overflow:
-        hidden;
-
-}
-
-
-.progress-fill {
-
-    height:
-        100%;
-
-    width:
-        0;
-
-    background:
-        linear-gradient(
-            90deg,
-            #22c55e,
-            #16a34a
-        );
-
-    transition:
-        width .3s;
-
-}
-
-
-/* =========================================================
-   TOOLBAR
-========================================================= */
-
-.toolbar {
-
-    padding:
-        11px 20px;
-
-    display:
-        flex;
-
-    flex-wrap:
-        wrap;
-
-    gap:
-        7px;
-
-    border-top:
-        1px solid var(--border);
-
-    border-bottom:
-        1px solid var(--border);
-
-}
-
-
-.search {
-
-    position:
-        relative;
-
-    flex:
-        1;
-
-    min-width:
-        180px;
-
-}
-
-
-.search input {
-
-    width:
-        100%;
-
-    padding:
-        9px 10px 9px 32px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        9px;
-
-    outline:
-        none;
-
-    background:
-        var(--surface-soft);
-
-    font-size:
-        11px;
-
-}
-
-
-.search span {
-
-    position:
-        absolute;
-
-    left:
-        10px;
-
-    top:
-        50%;
-
-    transform:
-        translateY(-50%);
-
-}
-
-
-.filter {
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        9px;
-
-    background:
-        white;
-
-    padding:
-        8px 10px;
-
-    font-size:
-        11px;
-
-    outline:
-        none;
-
-}
-
-
-/* =========================================================
-   VEHICLE LIST
-========================================================= */
-
-.vehicle-list {
-
-    padding:
-        14px 20px 20px;
-
-    max-height:
-        calc(100vh - 315px);
-
-    overflow-y:
-        auto;
-
-}
-
-
-.group {
-
-    margin-bottom:
-        18px;
-
-}
-
-
-.group-header {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    margin-bottom:
-        8px;
-
-}
-
-
-.group-name {
-
-    font-size:
-        13px;
-
-    font-weight:
-        850;
-
-}
-
-
-.group-count {
-
-    color:
-        var(--muted);
-
-    font-size:
-        10px;
-
-}
-
-
-.vehicle-card {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        auto 1fr auto;
-
-    align-items:
-        center;
-
-    gap:
-        11px;
-
-    padding:
-        11px;
-
-    margin-bottom:
-        7px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        12px;
-
-    background:
-        white;
-
-}
-
-
-.vehicle-card.completed {
-
-    background:
-        #f7fff9;
-
-    border-color:
-        #bbf7d0;
-
-}
-
-
-.vehicle-card.pending {
-
-    background:
-        #fffafa;
-
-    border-color:
-        #fecaca;
-
-}
-
-
-.vehicle-check {
-
-    width:
-        20px;
-
-    height:
-        20px;
-
-    accent-color:
-        var(--green);
-
-    cursor:
-        pointer;
-
-}
-
-
-.vehicle-number {
-
-    font-size:
-        14px;
-
-    font-weight:
-        850;
-
-}
-
-
-.vehicle-person {
-
-    margin-top:
-        3px;
-
-    color:
-        var(--muted);
-
-    font-size:
-        10px;
-
-}
-
-
-.status {
-
-    padding:
-        4px 8px;
-
-    border-radius:
-        999px;
-
-    font-size:
-        8px;
-
-    font-weight:
-        850;
-
-}
-
-
-.status.completed {
-
-    color:
-        var(--green-dark);
-
-    background:
-        #dcfce7;
-
-}
-
-
-.status.pending {
-
-    color:
-        var(--red-dark);
-
-    background:
-        #fee2e2;
-
-}
-
-
-.remark-area {
-
-    display:
-        none;
-
-    grid-column:
-        2 / 4;
-
-}
-
-
-.vehicle-card.pending
-.remark-area {
-
-    display:
-        block;
-
-}
-
-
-.remark-input {
-
-    width:
-        100%;
-
-    min-height:
-        46px;
-
-    resize:
-        vertical;
-
-    padding:
-        8px;
-
-    border:
-        1px solid #fecaca;
-
-    border-radius:
-        8px;
-
-    outline:
-        none;
-
-    font-size:
-        11px;
-
-}
-
-
-.remark-required {
-
-    margin-top:
-        3px;
-
-    color:
-        var(--red);
-
-    font-size:
-        8px;
-
-}
-
-
-/* =========================================================
-   ACTION BAR
-========================================================= */
-
-.action-bar {
-
-    padding:
-        14px 20px;
-
-    display:
-        flex;
-
-    flex-wrap:
-        wrap;
-
-    gap:
-        7px;
-
-    border-top:
-        1px solid var(--border);
-
-    background:
-        #fafcff;
-
-}
-
-
-.btn {
-
-    border:
-        0;
-
-    border-radius:
-        9px;
-
-    padding:
-        9px 13px;
-
-    cursor:
-        pointer;
-
-    font-size:
-        11px;
-
-    font-weight:
-        800;
-
-}
-
-
-.btn-primary {
-
-    color:
-        white;
-
-    background:
-        var(--primary);
-
-}
-
-
-.btn-success {
-
-    color:
-        white;
-
-    background:
-        var(--green);
-
-}
-
-
-.btn-whatsapp {
-
-    color:
-        white;
-
-    background:
-        #16a34a;
-
-}
-
-
-.btn-secondary {
-
-    color:
-        var(--text);
-
-    background:
-        white;
-
-    border:
-        1px solid var(--border);
-
-}
-
-
-.btn-danger {
-
-    color:
-        var(--red);
-
-    background:
-        #fff1f2;
-
-    border:
-        1px solid #fecdd3;
-
-}
-
-
-/* =========================================================
-   TOOLTIP
-========================================================= */
-
-.date-tooltip {
-
-    position:
-        fixed;
-
-    z-index:
-        9000;
-
-    width:
-        350px;
-
-    max-width:
-        calc(100vw - 20px);
-
-    padding:
-        13px;
-
-    border-radius:
-        13px;
-
-    background:
-        #111827;
-
-    color:
-        white;
-
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.25);
-
-    font-size:
-        11px;
-
-    pointer-events:
-        none;
-
-    opacity:
-        0;
-
-    transform:
-        translateY(4px);
-
-    transition:
-        .12s;
-
-}
-
-
-.date-tooltip.visible {
-
-    opacity:
-        1;
-
-    transform:
-        translateY(0);
-
-}
-
-
-.tooltip-title {
-
-    font-weight:
-        850;
-
-    margin-bottom:
-        6px;
-
-}
-
-
-.tooltip-item {
-
-    padding:
-        7px 0;
-
-    border-top:
-        1px solid rgba(255,255,255,.10);
-
-}
-
-
-.tooltip-route {
-
-    font-weight:
-        800;
-
-}
-
-
-.tooltip-person {
-
-    color:
-        #93c5fd;
-
-    margin-top:
-        2px;
-
-}
-
-
-.tooltip-remark {
-
-    color:
-        #fecaca;
-
-    margin-top:
-        2px;
-
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal-overlay {
-
-    position:
-        fixed;
-
-    inset:
-        0;
-
-    z-index:
-        8000;
-
-    display:
-        none;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        20px;
-
-    background:
-        rgba(15,23,42,.60);
-
-    backdrop-filter:
-        blur(5px);
-
-}
-
-
-.modal-overlay.show {
-
-    display:
-        flex;
-
-}
-
-
-.modal {
-
-    width:
-        min(650px,100%);
-
-    overflow:
-        hidden;
-
-    border-radius:
-        18px;
-
-    background:
-        white;
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.25);
-
-}
-
-
-.modal-header {
-
-    padding:
-        15px 18px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    border-bottom:
-        1px solid var(--border);
-
-}
-
-
-.modal-header h3 {
-
-    margin:
-        0;
-
-    font-size:
-        16px;
-
-}
-
-
-.modal-body {
-
-    padding:
-        18px;
-
-}
-
-
-.message-preview {
-
-    white-space:
-        pre-wrap;
-
-    max-height:
-        400px;
-
-    overflow-y:
-        auto;
-
-    padding:
-        14px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        11px;
-
-    background:
-        var(--surface-soft);
-
-    font-family:
-        monospace;
-
-    font-size:
-        11px;
-
-    line-height:
-        1.6;
-
-}
-
-
-.modal-actions {
-
-    padding:
-        13px 18px;
-
-    display:
-        flex;
-
-    justify-content:
-        flex-end;
-
-    gap:
-        7px;
-
-    border-top:
-        1px solid var(--border);
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast-container {
-
-    position:
-        fixed;
-
-    right:
-        18px;
-
-    bottom:
-        18px;
-
-    z-index:
-        10000;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        7px;
-
-}
-
-
-.toast {
-
-    padding:
-        11px 14px;
-
-    border-radius:
-        10px;
-
-    color:
-        white;
-
-    background:
-        #111827;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.18);
-
-    font-size:
-        11px;
-
-}
-
-
-.toast.success {
-
-    background:
-        #166534;
-
-}
-
-
-.toast.error {
-
-    background:
-        #991b1b;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1000px) {
-
-    .workspace {
-
-        grid-template-columns:
-            1fr;
-
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
     }
 
-
-    .calendar-panel {
-
-        position:
-            static;
-
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
     }
 
-
-    .vehicle-list {
-
-        max-height:
-            none;
-
+    button {
+      cursor: pointer;
     }
 
-}
+    /* =========================================================
+       LOGIN
+       ========================================================= */
 
-
-@media(max-width:650px) {
-
-    .header-inner {
-
-        padding:
-            12px;
-
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #eef2ff, #f8fafc);
     }
 
-
-    .brand h1 {
-
-        font-size:
-            16px;
-
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
     }
 
-
-    .brand p {
-
-        font-size:
-            9px;
-
+    .login-card h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      text-align: center;
     }
 
-
-    .user-email {
-
-        display:
-            none;
-
+    .login-subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 28px;
     }
 
-
-    .main {
-
-        padding:
-            10px;
-
+    .login-group {
+      margin-bottom: 16px;
     }
 
-
-    .summary {
-
-        grid-template-columns:
-            repeat(2,1fr);
-
+    .login-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
     }
 
-
-    .vehicle-list {
-
-        padding:
-            12px;
-
+    .login-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      outline: none;
     }
 
-
-    .toolbar {
-
-        padding:
-            10px 12px;
-
+    .login-group input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
     }
 
-
-    .action-bar {
-
-        padding:
-            11px;
-
+    .login-button {
+      width: 100%;
+      border: 0;
+      background: #4f46e5;
+      color: white;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      margin-top: 8px;
     }
 
-
-    .btn {
-
-        flex:
-            1;
-
-        min-width:
-            110px;
-
+    .login-button:hover {
+      background: #4338ca;
     }
 
-
-    .calendar {
-
-        padding:
-            9px;
-
+    .login-error {
+      margin-top: 12px;
+      padding: 10px;
+      background: #fef2f2;
+      color: #b91c1c;
+      border-radius: 8px;
+      display: none;
+      font-size: 13px;
     }
 
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    #loadingScreen {
+      min-height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      background: #f8fafc;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 4px solid #e5e7eb;
+      border-top-color: #4f46e5;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================================================
+       APP
+       ========================================================= */
+
+    #app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: #111827;
+      color: white;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .app-title {
+      font-size: 18px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .user-badge {
+      font-size: 12px;
+      background: #374151;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #e5e7eb;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .logout-btn {
+      border: 1px solid #4b5563;
+      background: transparent;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .logout-btn:hover {
+      background: #374151;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 16px;
+      padding: 16px;
+      max-width: 1800px;
+      margin: auto;
+    }
+
+    /* =========================================================
+       PANELS
+       ========================================================= */
+
+    .panel {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .panel-header small {
+      color: #6b7280;
+    }
+
+    /* =========================================================
+       CALENDAR
+       ========================================================= */
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .calendar-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    .icon-btn:hover {
+      background: #f3f4f6;
+    }
+
+    .today-btn {
+      border: 1px solid #4f46e5;
+      color: #4f46e5;
+      background: #eef2ff;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding: 10px 12px 0;
+      gap: 4px;
+    }
+
+    .weekday {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #6b7280;
+      padding: 6px 0;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 8px 12px 14px;
+    }
 
     .calendar-day {
-
-        min-height:
-            44px;
-
+      min-height: 54px;
+      border: 1px solid #e5e7eb;
+      border-radius: 9px;
+      background: white;
+      position: relative;
+      padding: 7px;
+      text-align: left;
+      transition: 0.15s;
     }
 
-
-    .day-status {
-
-        display:
-            none;
-
+    .calendar-day:hover {
+      border-color: #4f46e5;
+      transform: translateY(-1px);
     }
 
+    .calendar-day.empty {
+      border: 0;
+      background: transparent;
+      cursor: default;
+    }
+
+    .calendar-day.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .calendar-day.today {
+      outline: 2px solid #4f46e5;
+      outline-offset: -2px;
+    }
+
+    .calendar-day.selected {
+      border-color: #111827;
+      box-shadow: inset 0 0 0 2px #111827;
+    }
+
+    .calendar-day.completed {
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+
+    .calendar-day.pending {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    .day-number {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .day-status-dot {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d1d5db;
+    }
+
+    .calendar-day.completed .day-status-dot {
+      background: #16a34a;
+    }
+
+    .calendar-day.pending .day-status-dot {
+      background: #dc2626;
+    }
 
     .date-tooltip {
-
-        display:
-            none;
-
+      position: fixed;
+      z-index: 5000;
+      width: 310px;
+      max-width: calc(100vw - 20px);
+      background: #111827;
+      color: white;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+      display: none;
+      pointer-events: none;
+      font-size: 12px;
     }
 
-
-    .selected-date {
-
-        align-items:
-            flex-start;
-
-        flex-direction:
-            column;
-
+    .tooltip-title {
+      font-weight: 800;
+      margin-bottom: 8px;
     }
 
-}
+    .tooltip-item {
+      padding: 7px 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
 
-</style>
+    .tooltip-item:first-of-type {
+      border-top: 0;
+    }
 
+    .tooltip-route {
+      font-weight: 800;
+    }
+
+    .tooltip-person {
+      color: #c7d2fe;
+    }
+
+    .tooltip-reason {
+      color: #fca5a5;
+      margin-top: 2px;
+    }
+
+    /* =========================================================
+       CONTROLS
+       ========================================================= */
+
+    .controls {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      display: grid;
+      grid-template-columns: 1fr 160px 160px;
+      gap: 8px;
+    }
+
+    .control-input,
+    .control-select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      padding: 10px 11px;
+      outline: none;
+      background: white;
+    }
+
+    .control-input:focus,
+    .control-select:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+    }
+
+    /* =========================================================
+       VEHICLE TOOLBAR
+       ========================================================= */
+
+    .vehicle-toolbar {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e5e7eb;
+      background: #fafafa;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .select-all-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .select-all-box input {
+      width: 18px;
+      height: 18px;
+      accent-color: #16a34a;
+    }
+
+    .toolbar-btn {
+      border: 1px solid #d1d5db;
+      background: white;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .toolbar-btn:hover {
+      background: #f3f4f6;
+    }
+
+    .save-btn {
+      border: 0;
+      background: #16a34a;
+      color: white;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+    }
+
+    .save-btn:hover {
+      background: #15803d;
+    }
+
+    .save-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .reset-btn {
+      border: 1px solid #dc2626;
+      color: #dc2626;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    /* =========================================================
+       SUMMARY
+       ========================================================= */
+
+    .summary-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 12px 16px;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .summary-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 9px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .summary-number {
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    /* =========================================================
+       VEHICLE LIST
+       ========================================================= */
+
+    .vehicle-list {
+      padding: 12px;
+      max-height: calc(100vh - 285px);
+      min-height: 350px;
+      overflow-y: auto;
+    }
+
+    .vehicle-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      margin-bottom: 9px;
+      padding: 11px;
+      background: white;
+      transition: 0.15s;
+    }
+
+    .vehicle-card:hover {
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .vehicle-card.completed {
+      border-left: 4px solid #16a34a;
+      background: #f0fdf4;
+    }
+
+    .vehicle-card.pending {
+      border-left: 4px solid #dc2626;
+      background: #fffafa;
+    }
+
+    .vehicle-main {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .vehicle-checkbox {
+      width: 20px;
+      height: 20px;
+      accent-color: #16a34a;
+      cursor: pointer;
+    }
+
+    .vehicle-route {
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .vehicle-meta {
+      margin-top: 3px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .vehicle-brand {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .vehicle-person {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 4px 7px;
+      border-radius: 999px;
+    }
+
+    .status-completed {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-pending {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /*
+      IMPORTANT:
+      Remarks is deliberately inside normal document flow.
+      No absolute positioning.
+      This prevents the "typing somewhere else" issue.
+    */
+
+    .remarks-wrap {
+      margin-top: 10px;
+      position: relative;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .remarks-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: #6b7280;
+      margin-bottom: 5px;
+    }
+
+    .remarks-input {
+      display: block;
+      width: 100%;
+      min-height: 62px;
+      max-height: 180px;
+      resize: vertical;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      padding: 10px 11px;
+      background: #ffffff;
+      color: #111827;
+      line-height: 1.4;
+      outline: none;
+      overflow-y: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .remarks-input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+    }
+
+    .remarks-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .remarks-input.hidden {
+      display: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 45px 20px;
+      color: #6b7280;
+    }
+
+    /* =========================================================
+       WHATSAPP
+       ========================================================= */
+
+    .whatsapp-section {
+      margin: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .whatsapp-header {
+      padding: 12px;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .whatsapp-header strong {
+      font-size: 14px;
+    }
+
+    .whatsapp-controls {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+    }
+
+    .whatsapp-person {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      background: white;
+    }
+
+    .generate-wa {
+      border: 0;
+      background: #16a34a;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 9px;
+      font-weight: 800;
+    }
+
+    .share-wa {
+      border: 0;
+      background: #15803d;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 9px;
+      font-weight: 800;
+    }
+
+    .whatsapp-preview {
+      padding: 12px;
+      border-top: 1px solid #e5e7eb;
+      background: #fcfcfc;
+    }
+
+    .whatsapp-preview textarea {
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      padding: 10px;
+      line-height: 1.45;
+      outline: none;
+      background: white;
+    }
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: none;
+      min-width: 250px;
+      max-width: calc(100vw - 40px);
+      padding: 13px 15px;
+      border-radius: 10px;
+      color: white;
+      background: #111827;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    #toast.success {
+      background: #15803d;
+    }
+
+    #toast.error {
+      background: #b91c1c;
+    }
+
+    #toast.info {
+      background: #1d4ed8;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+      .main-layout {
+        grid-template-columns: 360px 1fr;
+      }
+
+      .controls {
+        grid-template-columns: 1fr 130px 130px;
+      }
+    }
+
+    @media (max-width: 850px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .vehicle-list {
+        max-height: none;
+      }
+
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .controls .control-input {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        padding: 10px 12px;
+      }
+
+      .app-title {
+        font-size: 15px;
+      }
+
+      .user-badge {
+        display: none;
+      }
+
+      .main-layout {
+        padding: 8px;
+        gap: 8px;
+      }
+
+      .summary-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .calendar-day {
+        min-height: 45px;
+        padding: 5px;
+      }
+
+      .day-number {
+        font-size: 12px;
+      }
+
+      .calendar-grid,
+      .calendar-weekdays {
+        padding-left: 7px;
+        padding-right: 7px;
+      }
+
+      .whatsapp-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .vehicle-main {
+        grid-template-columns: 25px 1fr;
+      }
+
+      .status-badge {
+        grid-column: 2;
+        justify-self: start;
+      }
+
+      .toolbar-left,
+      .toolbar-right {
+        width: 100%;
+      }
+
+      .save-btn,
+      .reset-btn {
+        flex: 1;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+  <!-- =======================================================
+       LOGIN SCREEN
+       ======================================================= -->
 
-<!-- =======================================================
-     LOGIN
-======================================================= -->
-
-<div
-    class="login-screen"
-    id="loginScreen">
+  <div id="loginScreen">
 
     <div class="login-card">
 
-        <div class="login-logo">
-            🚌
+      <h1>Vehicle Completion Tracker</h1>
+
+      <div class="login-subtitle">
+        Monitoring Centre Daily Report
+      </div>
+
+      <div class="login-group">
+        <label for="loginEmail">Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="username"
+          placeholder="Enter your email"
+        />
+      </div>
+
+      <div class="login-group">
+        <label for="loginPassword">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <button id="loginBtn" class="login-button">
+        Login
+      </button>
+
+      <div id="loginError" class="login-error"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       LOADING SCREEN
+       ======================================================= -->
+
+  <div id="loadingScreen">
+
+    <div class="spinner"></div>
+
+    <div>
+      Loading Vehicle Completion Tracker...
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       APPLICATION
+       ======================================================= -->
+
+  <div id="app">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+      <div class="topbar-left">
+
+        <div class="app-title">
+          Vehicle Completion Tracker
         </div>
 
-        <h1>
-            Vehicle Completion Tracker
-        </h1>
+        <div id="currentUserBadge" class="user-badge"></div>
 
-        <p>
-            Sign in to update daily vehicle completion
-            status and remarks.
-        </p>
+      </div>
+
+      <button id="logoutBtn" class="logout-btn">
+        Logout
+      </button>
+
+    </div>
 
 
-        <form id="loginForm">
+    <!-- MAIN -->
 
-            <div class="login-field">
+    <div class="main-layout">
 
-                <label>
-                    Email Address
-                </label>
 
-                <input
-                    type="email"
-                    id="loginEmail"
-                    autocomplete="username"
-                    required
-                    placeholder="Enter your email">
+      <!-- ===================================================
+           LEFT PANEL - CALENDAR
+           =================================================== -->
 
+      <div class="panel">
+
+        <div class="calendar-header">
+
+          <div>
+
+            <div id="calendarTitle" class="calendar-title">
+              September 2026
             </div>
 
+          </div>
 
-            <div class="login-field">
-
-                <label>
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="loginPassword"
-                    autocomplete="current-password"
-                    required
-                    placeholder="Enter your password">
-
-            </div>
-
+          <div class="calendar-nav">
 
             <button
-                type="submit"
-                class="login-button"
-                id="loginButton">
-
-                Sign In
-
+              id="prevMonthBtn"
+              class="icon-btn"
+              title="Previous month"
+            >
+              ‹
             </button>
 
+            <button
+              id="nextMonthBtn"
+              class="icon-btn"
+              title="Next month"
+            >
+              ›
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div style="padding: 10px 12px 0; text-align:right;">
+          <button id="todayBtn" class="today-btn">
+            Today
+          </button>
+        </div>
+
+
+        <div class="calendar-weekdays">
+
+          <div class="weekday">SUN</div>
+          <div class="weekday">MON</div>
+          <div class="weekday">TUE</div>
+          <div class="weekday">WED</div>
+          <div class="weekday">THU</div>
+          <div class="weekday">FRI</div>
+          <div class="weekday">SAT</div>
+
+        </div>
+
+
+        <div id="calendarGrid" class="calendar-grid"></div>
+
+
+        <div style="padding: 0 14px 14px;">
+
+          <div
+            style="
+              display:flex;
+              align-items:center;
+              gap:10px;
+              font-size:11px;
+              color:#6b7280;
+            "
+          >
+
+            <span
+              style="
+                width:9px;
+                height:9px;
+                border-radius:50%;
+                background:#16a34a;
+              "
+            ></span>
+
+            All 45 Completed
+
+          </div>
+
+          <div
+            style="
+              display:flex;
+              align-items:center;
+              gap:10px;
+              font-size:11px;
+              color:#6b7280;
+              margin-top:5px;
+            "
+          >
+
+            <span
+              style="
+                width:9px;
+                height:9px;
+                border-radius:50%;
+                background:#dc2626;
+              "
+            ></span>
+
+            Pending / Not Fully Completed
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           RIGHT PANEL - VEHICLES
+           =================================================== -->
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <h2 id="selectedDateTitle">
+            Vehicle List
+          </h2>
+
+          <small id="selectedDateSubtitle">
+            Select a date from the calendar
+          </small>
+
+        </div>
+
+
+        <!-- FILTERS -->
+
+        <div class="controls">
+
+          <input
+            id="searchInput"
+            class="control-input"
+            type="search"
+            placeholder="Search Route / Person / Brand..."
+          />
+
+          <select id="statusFilter" class="control-select">
+
+            <option value="ALL">
+              All Status
+            </option>
+
+            <option value="COMPLETED">
+              Completed
+            </option>
+
+            <option value="PENDING">
+              Pending
+            </option>
+
+          </select>
+
+
+          <select id="personFilter" class="control-select">
+
+            <option value="ALL">
+              All Persons
+            </option>
+
+            <option value="Sivachandran">
+              Sivachandran
+            </option>
+
+            <option value="Baskar">
+              Baskar
+            </option>
+
+            <option value="Shobana">
+              Shobana
+            </option>
+
+            <option value="Rajasekaran">
+              Rajasekaran
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary-bar">
+
+          <div class="summary-card">
 
             <div
-                class="login-error"
-                id="loginError">
+              id="totalCount"
+              class="summary-number"
+            >
+              45
             </div>
 
-        </form>
+            <div class="summary-label">
+              Total
+            </div>
 
-    </div>
-
-</div>
+          </div>
 
 
-<!-- =======================================================
-     LOADING
-======================================================= -->
+          <div class="summary-card">
 
-<div
-    class="loading-screen"
-    id="loadingScreen">
+            <div
+              id="completedCount"
+              class="summary-number"
+            >
+              0
+            </div>
 
-    <div class="loader-card">
+            <div class="summary-label">
+              Completed
+            </div>
 
-        <div class="spinner"></div>
+          </div>
 
-        <div>
-            Loading...
+
+          <div class="summary-card">
+
+            <div
+              id="pendingCount"
+              class="summary-number"
+            >
+              45
+            </div>
+
+            <div class="summary-label">
+              Pending
+            </div>
+
+          </div>
+
+
+          <div class="summary-card">
+
+            <div
+              id="completionPercent"
+              class="summary-number"
+            >
+              0%
+            </div>
+
+            <div class="summary-label">
+              Completion
+            </div>
+
+          </div>
+
         </div>
 
-    </div>
 
-</div>
+        <!-- VEHICLE TOOLBAR -->
+
+        <div class="vehicle-toolbar">
+
+          <div class="toolbar-left">
+
+            <label class="select-all-box">
+
+              <input
+                id="selectAllVehicles"
+                type="checkbox"
+              />
+
+              <span>
+                Select All
+              </span>
+
+            </label>
+
+            <button
+              id="clearAllBtn"
+              class="toolbar-btn"
+            >
+              Clear All
+            </button>
+
+          </div>
 
 
-<!-- =======================================================
-     APP
-======================================================= -->
+          <div class="toolbar-right">
 
-<div id="app">
+            <button
+              id="saveBtn"
+              class="save-btn"
+            >
+              Save
+            </button>
 
+            <button
+              id="resetBtn"
+              class="reset-btn"
+            >
+              Reset Day
+            </button>
 
-<header class="header">
-
-    <div class="header-inner">
-
-        <div class="brand">
-
-            <div class="brand-icon">
-                🚌
-            </div>
-
-            <div>
-
-                <h1>
-                    Vehicle Completion Tracker
-                </h1>
-
-                <p>
-                    Daily Assigned Vehicle Monitoring
-                </p>
-
-            </div>
+          </div>
 
         </div>
 
 
-        <div class="user-area">
+        <!-- VEHICLE LIST -->
 
-            <div class="user-info">
+        <div id="vehicleList" class="vehicle-list"></div>
 
-                <div
-                    class="user-name"
-                    id="userName">
-                    User
-                </div>
 
-                <div
-                    class="user-email"
-                    id="userEmail">
-                    --
-                </div>
+        <!-- WHATSAPP -->
 
-            </div>
+        <div class="whatsapp-section">
+
+          <div class="whatsapp-header">
+
+            <strong>
+              WhatsApp Daily Report
+            </strong>
+
+            <span
+              style="
+                font-size:11px;
+                color:#6b7280;
+              "
+            >
+              Share by Assigned Person
+            </span>
+
+          </div>
+
+
+          <div class="whatsapp-controls">
+
+            <select
+              id="whatsappPerson"
+              class="whatsapp-person"
+            >
+
+              <option value="ALL">
+                All Persons
+              </option>
+
+              <option value="Sivachandran">
+                Sivachandran
+              </option>
+
+              <option value="Baskar">
+                Baskar
+              </option>
+
+              <option value="Shobana">
+                Shobana
+              </option>
+
+              <option value="Rajasekaran">
+                Rajasekaran
+              </option>
+
+            </select>
 
 
             <button
-                class="logout-btn"
-                id="logoutButton">
-
-                Logout
-
+              id="generateWhatsAppBtn"
+              class="generate-wa"
+            >
+              Generate
             </button>
 
-        </div>
 
-    </div>
+            <button
+              id="shareWhatsAppBtn"
+              class="share-wa"
+            >
+              Share WhatsApp
+            </button>
 
-</header>
-
-
-<main class="main">
-
-
-<div class="workspace">
+          </div>
 
 
-<!-- =====================================================
-     CALENDAR
-====================================================== -->
+          <div class="whatsapp-preview">
 
-<section class="panel calendar-panel">
+            <textarea
+              id="whatsappMessage"
+              placeholder="Generated WhatsApp message will appear here..."
+            ></textarea>
 
-
-<div class="panel-header">
-
-    <div class="panel-title">
-
-        <h2>
-            📅 Daily Calendar
-        </h2>
-
-        <p>
-            Calendar starts from 15 September 2026
-        </p>
-
-    </div>
-
-</div>
-
-
-<div class="calendar-controls">
-
-    <button
-        class="icon-button"
-        id="previousMonth">
-
-        ‹
-
-    </button>
-
-
-    <div
-        class="month-title"
-        id="monthTitle">
-
-        --
-
-    </div>
-
-
-    <button
-        class="icon-button"
-        id="nextMonth">
-
-        ›
-
-    </button>
-
-</div>
-
-
-<div class="calendar">
-
-    <div class="weekdays">
-
-        <div class="weekday">SUN</div>
-        <div class="weekday">MON</div>
-        <div class="weekday">TUE</div>
-        <div class="weekday">WED</div>
-        <div class="weekday">THU</div>
-        <div class="weekday">FRI</div>
-        <div class="weekday">SAT</div>
-
-    </div>
-
-
-    <div
-        class="calendar-grid"
-        id="calendarGrid">
-    </div>
-
-</div>
-
-
-<div class="legend">
-
-    <div class="legend-item">
-
-        <span
-            class="legend-color legend-green">
-        </span>
-
-        Completed
-
-    </div>
-
-
-    <div class="legend-item">
-
-        <span
-            class="legend-color legend-red">
-        </span>
-
-        Pending
-
-    </div>
-
-</div>
-
-
-</section>
-
-
-<!-- =====================================================
-     DETAILS
-====================================================== -->
-
-<section class="panel">
-
-
-<div class="detail-header">
-
-    <div class="selected-date">
-
-        <div>
-
-            <h2
-                id="selectedDateTitle">
-                --
-            </h2>
-
-            <p
-                id="selectedDateSubtitle">
-                --
-            </p>
+          </div>
 
         </div>
 
-
-        <button
-            class="btn btn-secondary"
-            id="todayButton">
-
-            📅 Today
-
-        </button>
+      </div>
 
     </div>
 
-</div>
+  </div>
 
 
-<!-- SUMMARY -->
+  <!-- =======================================================
+       TOOLTIP
+       ======================================================= -->
 
-<div class="summary">
+  <div id="dateTooltip" class="date-tooltip"></div>
 
 
-<div class="summary-card">
+  <!-- =======================================================
+       TOAST
+       ======================================================= -->
 
-    <div class="summary-label">
-        Total
-    </div>
+  <div id="toast"></div>
 
-    <div
-        class="summary-value"
-        id="totalCount">
 
-        45
+  <!-- =======================================================
+       FIREBASE + APPLICATION
+       ======================================================= -->
 
-    </div>
+  <script type="module">
 
-</div>
+    /* =========================================================
+       FIREBASE IMPORTS
+       ========================================================= */
 
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
-<div
-    class="summary-card completed">
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-    <div class="summary-label">
-        Completed
-    </div>
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      onSnapshot,
+      deleteDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-    <div
-        class="summary-value"
-        id="completedCount">
 
-        0
+    /* =========================================================
+       FIREBASE CONFIGURATION
+       =========================================================
 
-    </div>
+       REPLACE THESE VALUES WITH YOUR FIREBASE CONFIG.
+    */
 
-</div>
-
-
-<div
-    class="summary-card pending">
-
-    <div class="summary-label">
-        Pending
-    </div>
-
-    <div
-        class="summary-value"
-        id="pendingCount">
-
-        45
-
-    </div>
-
-</div>
-
-
-<div class="summary-card">
-
-    <div class="summary-label">
-        Completion
-    </div>
-
-    <div
-        class="summary-value"
-        id="completionPercentage">
-
-        0%
-
-    </div>
-
-</div>
-
-
-</div>
-
-
-<!-- PROGRESS -->
-
-<div class="progress-wrapper">
-
-    <div class="progress-info">
-
-        <span>
-            Daily Completion
-        </span>
-
-        <span
-            id="progressText">
-
-            0 / 45
-
-        </span>
-
-    </div>
-
-
-    <div class="progress-bar">
-
-        <div
-            class="progress-fill"
-            id="progressFill">
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- TOOLBAR -->
-
-<div class="toolbar">
-
-
-<div class="search">
-
-    <span>
-        🔎
-    </span>
-
-    <input
-        type="search"
-        id="searchInput"
-        placeholder="Search vehicle or person...">
-
-</div>
-
-
-<select
-    class="filter"
-    id="statusFilter">
-
-    <option value="all">
-        All Status
-    </option>
-
-    <option value="completed">
-        Completed
-    </option>
-
-    <option value="pending">
-        Pending
-    </option>
-
-</select>
-
-
-<select
-    class="filter"
-    id="personFilter">
-
-    <option value="all">
-        All Persons
-    </option>
-
-</select>
-
-
-</div>
-
-
-<!-- VEHICLES -->
-
-<div
-    class="vehicle-list"
-    id="vehicleList">
-</div>
-
-
-<!-- ACTIONS -->
-
-<div class="action-bar">
-
-
-<button
-    class="btn btn-success"
-    id="saveButton">
-
-    💾 Save Day
-
-</button>
-
-
-<button
-    class="btn btn-whatsapp"
-    id="whatsappButton">
-
-    💬 WhatsApp
-
-</button>
-
-
-<button
-    class="btn btn-secondary"
-    id="copyButton">
-
-    📋 Copy Message
-
-</button>
-
-
-<button
-    class="btn btn-danger"
-    id="resetButton">
-
-    ↻ Reset Day
-
-</button>
-
-
-</div>
-
-
-</section>
-
-
-</div>
-
-</main>
-
-</div>
-
-
-<!-- =======================================================
-     TOOLTIP
-======================================================= -->
-
-<div
-    class="date-tooltip"
-    id="dateTooltip">
-</div>
-
-
-<!-- =======================================================
-     WHATSAPP MODAL
-======================================================= -->
-
-<div
-    class="modal-overlay"
-    id="whatsappModal">
-
-
-<div class="modal">
-
-
-<div class="modal-header">
-
-    <h3>
-        💬 WhatsApp Message
-    </h3>
-
-
-    <button
-        class="icon-button"
-        id="closeModal">
-
-        ×
-
-    </button>
-
-</div>
-
-
-<div class="modal-body">
-
-    <div
-        class="message-preview"
-        id="messagePreview">
-    </div>
-
-</div>
-
-
-<div class="modal-actions">
-
-
-<button
-    class="btn btn-secondary"
-    id="modalCloseButton">
-
-    Close
-
-</button>
-
-
-<button
-    class="btn btn-secondary"
-    id="modalCopyButton">
-
-    📋 Copy
-
-</button>
-
-
-<button
-    class="btn btn-whatsapp"
-    id="openWhatsAppButton">
-
-    💬 Open WhatsApp
-
-</button>
-
-
-</div>
-
-
-</div>
-
-</div>
-
-
-<!-- =======================================================
-     TOAST
-======================================================= -->
-
-<div
-    class="toast-container"
-    id="toastContainer">
-</div>
-
-
-<!-- =======================================================
-     FIREBASE + APPLICATION
-======================================================= -->
-
-<script type="module">
-
-
-/* =========================================================
-   FIREBASE IMPORTS
-========================================================= */
-
-import {
-    initializeApp
-} from
-"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-
-
-import {
-    getAuth,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signOut
-} from
-"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-
-
-import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    onSnapshot,
-    deleteDoc,
-    serverTimestamp
-} from
-"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-
-
-/* =========================================================
-   🔥 PASTE YOUR FIREBASE CONFIG HERE
-========================================================= */
-
-const firebaseConfig = {
+  const firebaseConfig = {
   apiKey: "AIzaSyCNiiNkriYSeIgtwFliMW9qa2zUzv9zHzs",
   authDomain: "completion-status.firebaseapp.com",
   projectId: "completion-status",
@@ -3000,2895 +1476,2703 @@ const firebaseConfig = {
 };
 
 
-/* =========================================================
-   FIREBASE INITIALIZATION
-========================================================= */
+    /* =========================================================
+       INITIALIZE FIREBASE
+       ========================================================= */
 
-const firebaseApp =
-    initializeApp(
-        firebaseConfig
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    /* =========================================================
+       SETTINGS
+       ========================================================= */
+
+    const START_DATE = new Date(
+      2026,
+      8,
+      15
     );
 
 
-const auth =
-    getAuth(
-        firebaseApp
-    );
+    /* =========================================================
+       VEHICLE MASTER LIST
+       ========================================================= */
 
+    const VEHICLES = [
 
-const db =
-    getFirestore(
-        firebaseApp
-    );
+      // =========================
+      // EKA
+      // =========================
 
-
-/* =========================================================
-   VEHICLE MASTER
-========================================================= */
-
-const VEHICLES = [
-
-    {
+      {
         route: "46A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "13A",
-        person: "Baskar",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "20A",
-        person: "Shobana",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "11A",
-        person: "Shobana",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "30B",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "10A",
-        person: "Baskar",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "30A",
-        person: "Baskar",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "37A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "6A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "8A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "21A",
-        person: "Baskar",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "45A",
-        person: "Shobana",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "14A",
-        person: "Shobana",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "5A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "9A",
-        person: "Baskar",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "18A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "19A",
-        person: "Sivachandran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "29A",
-        person: "Rajasekaran",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Rajasekaran"
+      },
 
-    {
+      {
         route: "34A",
-        person: "Baskar",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "43A",
-        person: "Shobana",
-        operator: "EKA"
-    },
+        brand: "EKA",
+        person: "Shobana"
+      },
 
 
-    /* OLECTRA */
+      // =========================
+      // OLECTRA
+      // =========================
 
-    {
+      {
         route: "2E",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "3EA",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "3EB",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "6EA",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "6EB",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "9E",
-        person: "Rajasekaran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Rajasekaran"
+      },
 
-    {
+      {
         route: "10EA",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "10EB",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "12EB",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "13E",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "1E",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "4E",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "5E",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "7E",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "8E",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "11EA",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "11EB",
-        person: "Shobana",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Shobana"
+      },
 
-    {
+      {
         route: "12EA",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "14E",
-        person: "Sivachandran",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Sivachandran"
+      },
 
-    {
+      {
         route: "15E",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "17EA",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "17EB",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "18E",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "19E",
-        person: "Baskar",
-        operator: "OLECTRA"
-    },
+        brand: "OLECTRA",
+        person: "Baskar"
+      },
 
-    {
+      {
         route: "20E",
-        person: "Shobana",
-        operator: "OLECTRA"
+        brand: "OLECTRA",
+        person: "Shobana"
+      }
+
+    ];
+
+
+    /* =========================================================
+       GLOBAL STATE
+       ========================================================= */
+
+    let currentUser = null;
+
+    let selectedDate = new Date();
+
+    let calendarMonth = new Date();
+
+    let selectedDayData = [];
+
+    let unsubscribeDay = null;
+
+    let tooltipTimer = null;
+
+
+    /* =========================================================
+       DOM REFERENCES
+       ========================================================= */
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const loadingScreen =
+      document.getElementById("loadingScreen");
+
+    const appScreen =
+      document.getElementById("app");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const loginEmail =
+      document.getElementById("loginEmail");
+
+    const loginPassword =
+      document.getElementById("loginPassword");
+
+    const loginError =
+      document.getElementById("loginError");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const currentUserBadge =
+      document.getElementById("currentUserBadge");
+
+    const calendarGrid =
+      document.getElementById("calendarGrid");
+
+    const calendarTitle =
+      document.getElementById("calendarTitle");
+
+    const selectedDateTitle =
+      document.getElementById("selectedDateTitle");
+
+    const selectedDateSubtitle =
+      document.getElementById("selectedDateSubtitle");
+
+    const vehicleList =
+      document.getElementById("vehicleList");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    const statusFilter =
+      document.getElementById("statusFilter");
+
+    const personFilter =
+      document.getElementById("personFilter");
+
+    const selectAllVehicles =
+      document.getElementById("selectAllVehicles");
+
+    const clearAllBtn =
+      document.getElementById("clearAllBtn");
+
+    const saveBtn =
+      document.getElementById("saveBtn");
+
+    const resetBtn =
+      document.getElementById("resetBtn");
+
+    const totalCount =
+      document.getElementById("totalCount");
+
+    const completedCount =
+      document.getElementById("completedCount");
+
+    const pendingCount =
+      document.getElementById("pendingCount");
+
+    const completionPercent =
+      document.getElementById("completionPercent");
+
+    const whatsappPerson =
+      document.getElementById("whatsappPerson");
+
+    const generateWhatsAppBtn =
+      document.getElementById("generateWhatsAppBtn");
+
+    const shareWhatsAppBtn =
+      document.getElementById("shareWhatsAppBtn");
+
+    const whatsappMessage =
+      document.getElementById("whatsappMessage");
+
+    const toast =
+      document.getElementById("toast");
+
+    const dateTooltip =
+      document.getElementById("dateTooltip");
+
+
+    /* =========================================================
+       UTILITY
+       ========================================================= */
+
+    function pad2(number) {
+
+      return String(number).padStart(2, "0");
+
     }
 
-];
 
+    function dateKey(date) {
 
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const START_DATE =
-    new Date(
-        2026,
-        8,
-        15
-    );
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let selectedDate =
-    new Date(
-        START_DATE
-    );
-
-
-let calendarMonth =
-    new Date(
-        START_DATE.getFullYear(),
-        START_DATE.getMonth(),
-        1
-    );
-
-
-let selectedDayData =
-    {};
-
-
-let unsubscribeDay =
-    null;
-
-
-let currentUser =
-    null;
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const loginScreen =
-    document.getElementById(
-        "loginScreen"
-    );
-
-
-const loginForm =
-    document.getElementById(
-        "loginForm"
-    );
-
-
-const loginEmail =
-    document.getElementById(
-        "loginEmail"
-    );
-
-
-const loginPassword =
-    document.getElementById(
-        "loginPassword"
-    );
-
-
-const loginButton =
-    document.getElementById(
-        "loginButton"
-    );
-
-
-const loginError =
-    document.getElementById(
-        "loginError"
-    );
-
-
-const app =
-    document.getElementById(
-        "app"
-    );
-
-
-const loadingScreen =
-    document.getElementById(
-        "loadingScreen"
-    );
-
-
-const calendarGrid =
-    document.getElementById(
-        "calendarGrid"
-    );
-
-
-const monthTitle =
-    document.getElementById(
-        "monthTitle"
-    );
-
-
-const selectedDateTitle =
-    document.getElementById(
-        "selectedDateTitle"
-    );
-
-
-const selectedDateSubtitle =
-    document.getElementById(
-        "selectedDateSubtitle"
-    );
-
-
-const vehicleList =
-    document.getElementById(
-        "vehicleList"
-    );
-
-
-const completedCount =
-    document.getElementById(
-        "completedCount"
-    );
-
-
-const pendingCount =
-    document.getElementById(
-        "pendingCount"
-    );
-
-
-const completionPercentage =
-    document.getElementById(
-        "completionPercentage"
-    );
-
-
-const progressFill =
-    document.getElementById(
-        "progressFill"
-    );
-
-
-const progressText =
-    document.getElementById(
-        "progressText"
-    );
-
-
-const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
-
-
-const statusFilter =
-    document.getElementById(
-        "statusFilter"
-    );
-
-
-const personFilter =
-    document.getElementById(
-        "personFilter"
-    );
-
-
-const dateTooltip =
-    document.getElementById(
-        "dateTooltip"
-    );
-
-
-const whatsappModal =
-    document.getElementById(
-        "whatsappModal"
-    );
-
-
-const messagePreview =
-    document.getElementById(
-        "messagePreview"
-    );
-
-
-/* =========================================================
-   UTILITY
-========================================================= */
-
-function pad(value) {
-
-    return String(value)
-        .padStart(2, "0");
-
-}
-
-
-function dateKey(date) {
-
-    return [
+      return [
         date.getFullYear(),
-        pad(date.getMonth() + 1),
-        pad(date.getDate())
-    ].join("-");
+        pad2(date.getMonth() + 1),
+        pad2(date.getDate())
+      ].join("-");
 
-}
-
-
-function displayDate(date) {
-
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
-    );
-
-}
+    }
 
 
-function longDate(date) {
+    function displayDate(date) {
 
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            weekday: "long",
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-        }
-    );
+      return [
+        pad2(date.getDate()),
+        pad2(date.getMonth() + 1),
+        date.getFullYear()
+      ].join("-");
 
-}
+    }
 
 
-function sameDay(a,b) {
+    function isSameDate(a, b) {
 
-    return (
+      return (
         a.getFullYear() === b.getFullYear() &&
         a.getMonth() === b.getMonth() &&
         a.getDate() === b.getDate()
-    );
+      );
 
-}
+    }
 
 
-function beforeStart(date) {
+    function cloneMasterVehicles() {
 
-    return (
-        date <
-        new Date(
-            START_DATE.getFullYear(),
-            START_DATE.getMonth(),
-            START_DATE.getDate()
+      return VEHICLES.map((vehicle, index) => ({
+
+        id:
+          `${vehicle.brand}_${vehicle.route}_${index}`,
+
+        route:
+          vehicle.route,
+
+        brand:
+          vehicle.brand,
+
+        person:
+          vehicle.person,
+
+        completed:
+          false,
+
+        remark:
+          ""
+
+      }));
+
+    }
+
+
+    function normalizeVehicles(data) {
+
+      const savedVehicles =
+        Array.isArray(data?.vehicles)
+          ? data.vehicles
+          : [];
+
+      return VEHICLES.map((master, index) => {
+
+        const existing =
+          savedVehicles.find(
+            v =>
+              v.id ===
+              `${master.brand}_${master.route}_${index}`
+          ) ||
+          savedVehicles.find(
+            v =>
+              v.route === master.route &&
+              v.brand === master.brand &&
+              v.person === master.person
+          );
+
+        return {
+
+          id:
+            `${master.brand}_${master.route}_${index}`,
+
+          route:
+            master.route,
+
+          brand:
+            master.brand,
+
+          person:
+            master.person,
+
+          completed:
+            existing?.completed === true,
+
+          remark:
+            existing?.remark || ""
+
+        };
+
+      });
+
+    }
+
+
+    function showToast(
+      message,
+      type = "info"
+    ) {
+
+      toast.textContent = message;
+
+      toast.className = "";
+
+      toast.id = "toast";
+
+      toast.classList.add(type);
+
+      toast.style.display = "block";
+
+      clearTimeout(showToast.timer);
+
+      showToast.timer =
+        setTimeout(() => {
+
+          toast.style.display = "none";
+
+        }, 2800);
+
+    }
+
+
+    function getSelectedVisibleVehicles() {
+
+      return Array.from(
+        vehicleList.querySelectorAll(
+          ".vehicle-card"
         )
-    );
+      );
 
-}
-
-
-function escapeHTML(value) {
-
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
+    }
 
 
-/* =========================================================
-   FIRESTORE REFERENCE
-========================================================= */
+    /* =========================================================
+       FIRESTORE REFERENCE
+       ========================================================= */
 
-function dayRef(date) {
+    function dayRef(date) {
 
-    return doc(
+      return doc(
         db,
         "dailyReports",
         dateKey(date)
-    );
+      );
 
-}
+    }
 
 
-/* =========================================================
-   AUTH
-========================================================= */
+    /* =========================================================
+       AUTHENTICATION
+       ========================================================= */
 
-loginForm.addEventListener(
-    "submit",
-    async event => {
+    loginBtn.addEventListener(
+      "click",
+      async () => {
 
-        event.preventDefault();
+        loginError.style.display = "none";
 
-        loginError.classList.remove(
-            "show"
-        );
+        const email =
+          loginEmail.value.trim();
 
-        loginButton.disabled =
-            true;
+        const password =
+          loginPassword.value;
 
-        loginButton.textContent =
-            "Signing in...";
+        if (!email || !password) {
 
+          loginError.textContent =
+            "Please enter email and password.";
+
+          loginError.style.display =
+            "block";
+
+          return;
+
+        }
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+          "Logging in...";
 
         try {
 
-            await signInWithEmailAndPassword(
-                auth,
-                loginEmail.value.trim(),
-                loginPassword.value
-            );
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
 
-        } catch(error) {
+        } catch (error) {
 
-            console.error(error);
+          console.error(error);
 
-            loginError.textContent =
-                friendlyAuthError(
-                    error.code
-                );
+          loginError.textContent =
+            getFirebaseErrorMessage(error);
 
-            loginError.classList.add(
-                "show"
-            );
+          loginError.style.display =
+            "block";
 
         } finally {
 
-            loginButton.disabled =
-                false;
+          loginBtn.disabled = false;
 
-            loginButton.textContent =
-                "Sign In";
+          loginBtn.textContent =
+            "Login";
 
         }
 
-    }
-);
+      }
+    );
 
 
-function friendlyAuthError(code) {
+    loginPassword.addEventListener(
+      "keydown",
+      event => {
 
-    switch(code) {
+        if (event.key === "Enter") {
 
-        case "auth/invalid-credential":
-            return "Invalid email or password.";
+          loginBtn.click();
 
-        case "auth/invalid-email":
-            return "Please enter a valid email address.";
+        }
 
-        case "auth/user-disabled":
-            return "This account has been disabled.";
-
-        case "auth/too-many-requests":
-            return "Too many attempts. Please try again later.";
-
-        default:
-            return "Unable to sign in. Please check your details.";
-
-    }
-
-}
+      }
+    );
 
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+    logoutBtn.addEventListener(
+      "click",
+      async () => {
 
-onAuthStateChanged(
-    auth,
-    async user => {
+        await signOut(auth);
 
-        if(user) {
-
-            currentUser =
-                user;
-
-            loginScreen.style.display =
-                "none";
-
-            app.classList.add(
-                "visible"
-            );
+      }
+    );
 
 
-            document.getElementById(
-                "userEmail"
-            ).textContent =
-                user.email || "";
+    onAuthStateChanged(
+      auth,
+      user => {
 
+        if (user) {
 
-            document.getElementById(
-                "userName"
-            ).textContent =
-                user.email
-                    ? user.email.split("@")[0]
-                    : "User";
+          currentUser =
+            user;
 
+          loginScreen.style.display =
+            "none";
 
-            initializeAppUI();
+          loadingScreen.style.display =
+            "flex";
+
+          appScreen.style.display =
+            "none";
+
+          currentUserBadge.textContent =
+            user.email || "Logged in";
+
+          initializeApplication();
 
         } else {
 
-            currentUser =
-                null;
+          currentUser =
+            null;
 
-            app.classList.remove(
-                "visible"
-            );
-
-            loginScreen.style.display =
-                "flex";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-document.getElementById(
-    "logoutButton"
-).addEventListener(
-    "click",
-    async () => {
-
-        if(unsubscribeDay) {
+          if (unsubscribeDay) {
 
             unsubscribeDay();
 
             unsubscribeDay =
-                null;
+              null;
+
+          }
+
+          loginScreen.style.display =
+            "flex";
+
+          loadingScreen.style.display =
+            "none";
+
+          appScreen.style.display =
+            "none";
 
         }
 
-        await signOut(auth);
+      }
+    );
+
+
+    function getFirebaseErrorMessage(error) {
+
+      const code =
+        error?.code || "";
+
+      if (
+        code.includes(
+          "invalid-credential"
+        )
+      ) {
+
+        return "Invalid email or password.";
+
+      }
+
+      if (
+        code.includes(
+          "user-not-found"
+        )
+      ) {
+
+        return "User account not found.";
+
+      }
+
+      if (
+        code.includes(
+          "wrong-password"
+        )
+      ) {
+
+        return "Incorrect password.";
+
+      }
+
+      if (
+        code.includes(
+          "too-many-requests"
+        )
+      ) {
+
+        return "Too many attempts. Please try again later.";
+
+      }
+
+      return (
+        error?.message ||
+        "Login failed."
+      );
 
     }
-);
 
 
-/* =========================================================
-   LOAD DAY REAL-TIME
-========================================================= */
+    /* =========================================================
+       APPLICATION INITIALIZATION
+       ========================================================= */
 
-function subscribeToSelectedDay() {
+    function initializeApplication() {
 
-    if(unsubscribeDay) {
+      selectedDate =
+        new Date();
+
+      calendarMonth =
+        new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          1
+        );
+
+      selectedDate =
+        normalizeSelectedDate(
+          selectedDate
+        );
+
+      appScreen.style.display =
+        "block";
+
+      loadingScreen.style.display =
+        "none";
+
+      renderCalendar();
+
+      subscribeToSelectedDay();
+
+    }
+
+
+    function normalizeSelectedDate(date) {
+
+      if (date < START_DATE) {
+
+        return new Date(
+          START_DATE
+        );
+
+      }
+
+      return date;
+
+    }
+
+
+    /* =========================================================
+       CALENDAR
+       ========================================================= */
+
+    function renderCalendar() {
+
+      calendarTitle.textContent =
+        calendarMonth.toLocaleString(
+          "en-IN",
+          {
+            month: "long",
+            year: "numeric"
+          }
+        );
+
+      calendarGrid.innerHTML = "";
+
+      const year =
+        calendarMonth.getFullYear();
+
+      const month =
+        calendarMonth.getMonth();
+
+      const firstDay =
+        new Date(
+          year,
+          month,
+          1
+        ).getDay();
+
+      const daysInMonth =
+        new Date(
+          year,
+          month + 1,
+          0
+        ).getDate();
+
+      for (
+        let i = 0;
+        i < firstDay;
+        i++
+      ) {
+
+        const empty =
+          document.createElement("div");
+
+        empty.className =
+          "calendar-day empty";
+
+        calendarGrid.appendChild(
+          empty
+        );
+
+      }
+
+      for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+      ) {
+
+        const date =
+          new Date(
+            year,
+            month,
+            day
+          );
+
+        const button =
+          document.createElement("button");
+
+        button.type =
+          "button";
+
+        button.className =
+          "calendar-day";
+
+        if (date < START_DATE) {
+
+          button.classList.add(
+            "disabled"
+          );
+
+          button.disabled =
+            true;
+
+        }
+
+        if (
+          isSameDate(
+            date,
+            new Date()
+          )
+        ) {
+
+          button.classList.add(
+            "today"
+          );
+
+        }
+
+        if (
+          isSameDate(
+            date,
+            selectedDate
+          )
+        ) {
+
+          button.classList.add(
+            "selected"
+          );
+
+        }
+
+        const number =
+          document.createElement("div");
+
+        number.className =
+          "day-number";
+
+        number.textContent =
+          day;
+
+        const dot =
+          document.createElement("div");
+
+        dot.className =
+          "day-status-dot";
+
+        button.appendChild(
+          number
+        );
+
+        button.appendChild(
+          dot
+        );
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            selectedDate =
+              new Date(date);
+
+            subscribeToSelectedDay();
+
+            renderCalendar();
+
+          }
+        );
+
+
+        /*
+          Hover tooltip.
+          It fetches the saved date from Firestore.
+        */
+
+        button.addEventListener(
+          "mouseenter",
+          event => {
+
+            if (
+              date < START_DATE
+            ) {
+
+              return;
+
+            }
+
+            showDateTooltip(
+              date,
+              event.currentTarget
+            );
+
+          }
+        );
+
+
+        button.addEventListener(
+          "mouseleave",
+          () => {
+
+            hideDateTooltip();
+
+          }
+        );
+
+
+        calendarGrid.appendChild(
+          button
+        );
+
+        loadCalendarDateStatus(
+          date,
+          button
+        );
+
+      }
+
+    }
+
+
+    async function loadCalendarDateStatus(
+      date,
+      element
+    ) {
+
+      if (date < START_DATE) {
+
+        return;
+
+      }
+
+      try {
+
+        const snapshot =
+          await getDoc(
+            dayRef(date)
+          );
+
+        if (
+          !snapshot.exists()
+        ) {
+
+          element.classList.add(
+            "pending"
+          );
+
+          return;
+
+        }
+
+        const data =
+          snapshot.data();
+
+        const vehicles =
+          normalizeVehicles(
+            data
+          );
+
+        const allCompleted =
+          vehicles.length ===
+            VEHICLES.length &&
+          vehicles.every(
+            v => v.completed === true
+          );
+
+        if (allCompleted) {
+
+          element.classList.remove(
+            "pending"
+          );
+
+          element.classList.add(
+            "completed"
+          );
+
+        } else {
+
+          element.classList.remove(
+            "completed"
+          );
+
+          element.classList.add(
+            "pending"
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Calendar status error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    document
+      .getElementById("prevMonthBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          const newMonth =
+            new Date(
+              calendarMonth
+            );
+
+          newMonth.setMonth(
+            newMonth.getMonth() - 1
+          );
+
+          /*
+            Do not allow navigating
+            before September 2026.
+          */
+
+          const minimumMonth =
+            new Date(
+              START_DATE.getFullYear(),
+              START_DATE.getMonth(),
+              1
+            );
+
+          if (
+            newMonth < minimumMonth
+          ) {
+
+            return;
+
+          }
+
+          calendarMonth =
+            newMonth;
+
+          renderCalendar();
+
+        }
+      );
+
+
+    document
+      .getElementById("nextMonthBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          calendarMonth =
+            new Date(
+              calendarMonth
+            );
+
+          calendarMonth.setMonth(
+            calendarMonth.getMonth() + 1
+          );
+
+          renderCalendar();
+
+        }
+      );
+
+
+    document
+      .getElementById("todayBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          const today =
+            normalizeSelectedDate(
+              new Date()
+            );
+
+          selectedDate =
+            today;
+
+          calendarMonth =
+            new Date(
+              today.getFullYear(),
+              today.getMonth(),
+              1
+            );
+
+          renderCalendar();
+
+          subscribeToSelectedDay();
+
+        }
+      );
+
+
+    /* =========================================================
+       SELECTED DAY REAL-TIME LISTENER
+       ========================================================= */
+
+    function subscribeToSelectedDay() {
+
+      if (
+        unsubscribeDay
+      ) {
 
         unsubscribeDay();
 
         unsubscribeDay =
-            null;
+          null;
 
-    }
+      }
 
+      selectedDate =
+        normalizeSelectedDate(
+          selectedDate
+        );
 
-    selectedDayData =
-        {};
+      selectedDateTitle.textContent =
+        `Vehicle List — ${displayDate(selectedDate)}`;
 
+      selectedDateSubtitle.textContent =
+        "Loading real-time data...";
 
-    unsubscribeDay =
+      unsubscribeDay =
         onSnapshot(
-            dayRef(selectedDate),
+          dayRef(selectedDate),
 
-            snapshot => {
+          snapshot => {
 
-                if(snapshot.exists()) {
-
-                    const data =
-                        snapshot.data();
-
-                    selectedDayData =
-                        data.vehicles || {};
-
-                } else {
-
-                    selectedDayData =
-                        {};
-
-                }
-
-                renderVehicles();
-
-                renderCalendar();
-
-            },
-
-            error => {
-
-                console.error(error);
-
-                showToast(
-                    "Unable to load daily data.",
-                    "error"
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   CHECK DAY COMPLETE
-========================================================= */
-
-function isDayComplete(date) {
-
-    /*
-       For the currently selected day,
-       use real-time loaded data.
-    */
-
-    if(
-        sameDay(
-            date,
-            selectedDate
-        )
-    ) {
-
-        return VEHICLES.every(
-            vehicle => {
-
-                return (
-                    selectedDayData[
-                        vehicle.route
-                    ] &&
-                    selectedDayData[
-                        vehicle.route
-                    ].completed === true
-                );
-
-            }
-        );
-
-    }
-
-
-    /*
-       Other dates are loaded
-       from cache map.
-    */
-
-    return calendarStatus[
-        dateKey(date)
-    ] === true;
-
-}
-
-
-/* =========================================================
-   CALENDAR STATUS CACHE
-========================================================= */
-
-let calendarStatus = {};
-
-
-/* =========================================================
-   LOAD CALENDAR STATUS
-=========================================================
-
-   We check each date document.
-   This keeps the implementation simple.
-
-========================================================= */
-
-async function loadCalendarStatus() {
-
-    const year =
-        calendarMonth.getFullYear();
-
-    const month =
-        calendarMonth.getMonth();
-
-    const days =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
-    calendarStatus =
-        {};
-
-
-    const requests = [];
-
-
-    for(
-        let day = 1;
-        day <= days;
-        day++
-    ) {
-
-        const date =
-            new Date(
-                year,
-                month,
-                day
-            );
-
-
-        if(beforeStart(date)) {
-
-            continue;
-
-        }
-
-
-        requests.push(
-
-            getDoc(
-                dayRef(date)
-            ).then(snapshot => {
-
-                if(!snapshot.exists()) {
-
-                    calendarStatus[
-                        dateKey(date)
-                    ] = false;
-
-                    return;
-
-                }
-
-
-                const data =
-                    snapshot.data();
-
-
-                const vehicles =
-                    data.vehicles || {};
-
-
-                calendarStatus[
-                    dateKey(date)
-                ] =
-                    VEHICLES.every(
-                        vehicle => {
-
-                            return (
-                                vehicles[
-                                    vehicle.route
-                                ] &&
-                                vehicles[
-                                    vehicle.route
-                                ].completed === true
-                            );
-
-                        }
-                    );
-
-            }).catch(error => {
-
-                console.error(error);
-
-                calendarStatus[
-                    dateKey(date)
-                ] = false;
-
-            })
-
-        );
-
-    }
-
-
-    await Promise.all(
-        requests
-    );
-
-
-    renderCalendar();
-
-}
-
-
-/* =========================================================
-   RENDER CALENDAR
-========================================================= */
-
-function renderCalendar() {
-
-    calendarGrid.innerHTML =
-        "";
-
-
-    const year =
-        calendarMonth.getFullYear();
-
-    const month =
-        calendarMonth.getMonth();
-
-
-    const firstDay =
-        new Date(
-            year,
-            month,
-            1
-        ).getDay();
-
-
-    const daysInMonth =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
-    monthTitle.textContent =
-        calendarMonth.toLocaleDateString(
-            "en-IN",
-            {
-                month: "long",
-                year: "numeric"
-            }
-        );
-
-
-    for(
-        let i = 0;
-        i < firstDay;
-        i++
-    ) {
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-        empty.className =
-            "calendar-day empty";
-
-        calendarGrid.appendChild(
-            empty
-        );
-
-    }
-
-
-    for(
-        let day = 1;
-        day <= daysInMonth;
-        day++
-    ) {
-
-        const date =
-            new Date(
-                year,
-                month,
-                day
-            );
-
-
-        const cell =
-            document.createElement(
-                "div"
-            );
-
-
-        cell.className =
-            "calendar-day";
-
-
-        if(beforeStart(date)) {
-
-            cell.classList.add(
-                "disabled"
-            );
-
-        }
-
-
-        if(
-            sameDay(
-                date,
-                selectedDate
-            )
-        ) {
-
-            cell.classList.add(
-                "selected"
-            );
-
-        }
-
-
-        if(
-            sameDay(
-                date,
-                new Date()
-            )
-        ) {
-
-            cell.classList.add(
-                "today"
-            );
-
-        }
-
-
-        const complete =
-            isDayComplete(date);
-
-
-        if(
-            !beforeStart(date)
-        ) {
-
-            cell.classList.add(
-                complete
-                    ? "complete"
-                    : "incomplete"
-            );
-
-        }
-
-
-        cell.innerHTML = `
-
-            <div class="day-number">
-                ${day}
-            </div>
-
-            ${
-                !beforeStart(date)
-                    ? `
-                        <div class="day-status">
-                            ${
-                                complete
-                                    ? "DONE"
-                                    : "PENDING"
-                            }
-                        </div>
-
-                        <span class="day-dot"></span>
-                    `
-                    : ""
-            }
-
-        `;
-
-
-        if(
-            !beforeStart(date)
-        ) {
-
-            cell.addEventListener(
-                "click",
-                () => {
-
-                    selectedDate =
-                        new Date(date);
-
-                    calendarMonth =
-                        new Date(
-                            date.getFullYear(),
-                            date.getMonth(),
-                            1
-                        );
-
-                    subscribeToSelectedDay();
-
-                    loadCalendarStatus();
-
-                }
-            );
-
-
-            cell.addEventListener(
-                "mouseenter",
-                event => {
-
-                    showTooltip(
-                        date,
-                        event
-                    );
-
-                }
-            );
-
-
-            cell.addEventListener(
-                "mousemove",
-                moveTooltip
-            );
-
-
-            cell.addEventListener(
-                "mouseleave",
-                hideTooltip
-            );
-
-        }
-
-
-        calendarGrid.appendChild(
-            cell
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   TOOLTIP
-========================================================= */
-
-function showTooltip(
-    date,
-    event
-) {
-
-    if(
-        sameDay(
-            date,
-            selectedDate
-        )
-    ) {
-
-        buildTooltip(
-            date,
-            selectedDayData
-        );
-
-    } else {
-
-        getDoc(
-            dayRef(date)
-        ).then(snapshot => {
-
-            const data =
-                snapshot.exists()
-                    ? snapshot.data().vehicles || {}
-                    : {};
-
-            buildTooltip(
-                date,
-                data
-            );
-
-        });
-
-    }
-
-
-    moveTooltip(event);
-
-    dateTooltip.classList.add(
-        "visible"
-    );
-
-}
-
-
-function buildTooltip(
-    date,
-    data
-) {
-
-    const pending =
-        VEHICLES.filter(
-            vehicle => {
-
-                const item =
-                    data[
-                        vehicle.route
-                    ];
-
-                return !(
-                    item &&
-                    item.completed === true
-                );
-
-            }
-        );
-
-
-    if(
-        pending.length === 0
-    ) {
-
-        dateTooltip.innerHTML = `
-
-            <div class="tooltip-title">
-                ${displayDate(date)}
-            </div>
-
-            <div>
-                ✅ All 45 vehicles completed.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    const withRemarks =
-        pending.filter(
-            vehicle => {
-
-                const item =
-                    data[
-                        vehicle.route
-                    ];
-
-                return (
-                    item &&
-                    item.remark &&
-                    item.remark.trim()
-                );
-
-            }
-        );
-
-
-    let html = `
-
-        <div class="tooltip-title">
-            ${displayDate(date)}
-        </div>
-
-    `;
-
-
-    if(
-        withRemarks.length === 0
-    ) {
-
-        html += `
-
-            <div>
-                ⏳ ${pending.length}
-                vehicle(s) pending.
-            </div>
-
-        `;
-
-    } else {
-
-        withRemarks.forEach(
-            vehicle => {
-
-                const item =
-                    data[
-                        vehicle.route
-                    ];
-
-
-                html += `
-
-                    <div class="tooltip-item">
-
-                        <div class="tooltip-route">
-
-                            ${vehicle.operator}
-                            ·
-                            ${vehicle.route}
-
-                        </div>
-
-                        <div class="tooltip-person">
-
-                            👤
-                            ${vehicle.person}
-
-                        </div>
-
-                        <div class="tooltip-remark">
-
-                            📝
-                            ${escapeHTML(
-                                item.remark
-                            )}
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }
-        );
-
-    }
-
-
-    dateTooltip.innerHTML =
-        html;
-
-}
-
-
-function moveTooltip(event) {
-
-    const offset =
-        15;
-
-
-    let x =
-        event.clientX +
-        offset;
-
-
-    let y =
-        event.clientY +
-        offset;
-
-
-    const rect =
-        dateTooltip.getBoundingClientRect();
-
-
-    if(
-        x + rect.width >
-        window.innerWidth - 10
-    ) {
-
-        x =
-            event.clientX -
-            rect.width -
-            offset;
-
-    }
-
-
-    if(
-        y + rect.height >
-        window.innerHeight - 10
-    ) {
-
-        y =
-            event.clientY -
-            rect.height -
-            offset;
-
-    }
-
-
-    dateTooltip.style.left =
-        `${Math.max(10,x)}px`;
-
-    dateTooltip.style.top =
-        `${Math.max(10,y)}px`;
-
-}
-
-
-function hideTooltip() {
-
-    dateTooltip.classList.remove(
-        "visible"
-    );
-
-}
-
-
-/* =========================================================
-   RENDER VEHICLES
-========================================================= */
-
-function renderVehicles() {
-
-    const search =
-        searchInput.value
-            .trim()
-            .toLowerCase();
-
-
-    const status =
-        statusFilter.value;
-
-
-    const person =
-        personFilter.value;
-
-
-    let completed =
-        0;
-
-
-    VEHICLES.forEach(
-        vehicle => {
-
-            if(
-                selectedDayData[
-                    vehicle.route
-                ] &&
-                selectedDayData[
-                    vehicle.route
-                ].completed
+            if (
+              snapshot.exists()
             ) {
 
-                completed++;
+              selectedDayData =
+                normalizeVehicles(
+                  snapshot.data()
+                );
+
+            } else {
+
+              selectedDayData =
+                cloneMasterVehicles();
 
             }
 
-        }
-    );
+            selectedDateSubtitle.textContent =
+              snapshot.exists()
+                ? "Saved report • Real-time synchronized"
+                : "No report saved yet";
 
+            renderVehicleList();
 
-    const pending =
-        VEHICLES.length -
-        completed;
+            updateSummary();
 
+          },
 
-    const percentage =
-        Math.round(
-            (
-                completed /
-                VEHICLES.length
-            ) * 100
-        );
+          error => {
 
-
-    document.getElementById(
-        "totalCount"
-    ).textContent =
-        VEHICLES.length;
-
-
-    completedCount.textContent =
-        completed;
-
-
-    pendingCount.textContent =
-        pending;
-
-
-    completionPercentage.textContent =
-        `${percentage}%`;
-
-
-    progressText.textContent =
-        `${completed} / ${VEHICLES.length}`;
-
-
-    progressFill.style.width =
-        `${percentage}%`;
-
-
-    selectedDateTitle.textContent =
-        displayDate(
-            selectedDate
-        );
-
-
-    selectedDateSubtitle.textContent =
-        longDate(
-            selectedDate
-        );
-
-
-    const groups = {
-
-        EKA:
-            VEHICLES.filter(
-                v => v.operator === "EKA"
-            ),
-
-        OLECTRA:
-            VEHICLES.filter(
-                v => v.operator === "OLECTRA"
-            )
-
-    };
-
-
-    vehicleList.innerHTML =
-        "";
-
-
-    let visible =
-        0;
-
-
-    Object.entries(
-        groups
-    ).forEach(
-        ([operator,vehicles]) => {
-
-
-            const filtered =
-                vehicles.filter(
-                    vehicle => {
-
-                        const item =
-                            selectedDayData[
-                                vehicle.route
-                            ] || {
-                                completed: false,
-                                remark: ""
-                            };
-
-
-                        const matchesSearch =
-                            !search ||
-                            vehicle.route
-                                .toLowerCase()
-                                .includes(search) ||
-                            vehicle.person
-                                .toLowerCase()
-                                .includes(search);
-
-
-                        const matchesStatus =
-                            status === "all" ||
-
-                            (
-                                status === "completed" &&
-                                item.completed
-                            ) ||
-
-                            (
-                                status === "pending" &&
-                                !item.completed
-                            );
-
-
-                        const matchesPerson =
-                            person === "all" ||
-                            vehicle.person === person;
-
-
-                        return (
-                            matchesSearch &&
-                            matchesStatus &&
-                            matchesPerson
-                        );
-
-                    }
-                );
-
-
-            if(
-                filtered.length === 0
-            ) {
-
-                return;
-
-            }
-
-
-            visible +=
-                filtered.length;
-
-
-            const group =
-                document.createElement(
-                    "div"
-                );
-
-
-            group.className =
-                "group";
-
-
-            const groupCompleted =
-                filtered.filter(
-                    vehicle => {
-
-                        return (
-                            selectedDayData[
-                                vehicle.route
-                            ] &&
-                            selectedDayData[
-                                vehicle.route
-                            ].completed
-                        );
-
-                    }
-                ).length;
-
-
-            group.innerHTML = `
-
-                <div class="group-header">
-
-                    <div class="group-name">
-
-                        🚌 ${operator}
-
-                    </div>
-
-                    <div class="group-count">
-
-                        ${groupCompleted}/${vehicles.length}
-
-                    </div>
-
-                </div>
-
-            `;
-
-
-            filtered.forEach(
-                vehicle => {
-
-                    const item =
-                        selectedDayData[
-                            vehicle.route
-                        ] || {
-
-                            completed:
-                                false,
-
-                            remark:
-                                ""
-
-                        };
-
-
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    card.className =
-                        "vehicle-card " +
-                        (
-                            item.completed
-                                ? "completed"
-                                : "pending"
-                        );
-
-
-                    card.innerHTML = `
-
-                        <input
-                            type="checkbox"
-                            class="vehicle-check"
-                            ${
-                                item.completed
-                                    ? "checked"
-                                    : ""
-                            }>
-
-
-                        <div>
-
-                            <div>
-
-                                <span class="vehicle-number">
-
-                                    ${vehicle.route}
-
-                                </span>
-
-                                <span class="
-                                    status
-                                    ${
-                                        item.completed
-                                            ? "completed"
-                                            : "pending"
-                                    }
-                                ">
-
-                                    ${
-                                        item.completed
-                                            ? "COMPLETED"
-                                            : "PENDING"
-                                    }
-
-                                </span>
-
-                            </div>
-
-
-                            <div class="vehicle-person">
-
-                                👤 Assigned:
-                                <strong>
-                                    ${vehicle.person}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div>
-
-                            ${
-                                item.completed
-                                    ? "✓"
-                                    : "!"
-                            }
-
-                        </div>
-
-
-                        <div class="remark-area">
-
-                            <textarea
-                                class="remark-input"
-                                placeholder="Enter pending reason / remark..."
-                            >${escapeHTML(
-                                item.remark || ""
-                            )}</textarea>
-
-                            <div class="remark-required">
-
-                                * Remark is mandatory while pending.
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-
-                    const checkbox =
-                        card.querySelector(
-                            ".vehicle-check"
-                        );
-
-
-                    const remark =
-                        card.querySelector(
-                            ".remark-input"
-                        );
-
-
-                    checkbox.addEventListener(
-                        "change",
-                        () => {
-
-                            updateLocalVehicle(
-                                vehicle.route,
-                                checkbox.checked,
-                                remark.value
-                            );
-
-                        }
-                    );
-
-
-                    remark.addEventListener(
-                        "input",
-                        () => {
-
-                            updateLocalVehicle(
-                                vehicle.route,
-                                checkbox.checked,
-                                remark.value
-                            );
-
-                        }
-                    );
-
-
-                    group.appendChild(
-                        card
-                    );
-
-                }
+            console.error(
+              error
             );
 
-
-            vehicleList.appendChild(
-                group
-            );
-
-        }
-    );
-
-
-    if(
-        visible === 0
-    ) {
-
-        vehicleList.innerHTML = `
-
-            <div style="
-                padding:40px;
-                text-align:center;
-                color:#64748b;
-            ">
-
-                🔎
-                <br><br>
-                No vehicles found.
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   LOCAL VEHICLE UPDATE
-========================================================= */
-
-function updateLocalVehicle(
-    route,
-    completed,
-    remark
-) {
-
-    selectedDayData[
-        route
-    ] = {
-
-        completed:
-            Boolean(completed),
-
-        remark:
-            String(
-                remark || ""
-            ).trim()
-
-    };
-
-
-    renderVehicles();
-
-}
-
-
-/* =========================================================
-   SAVE DAY TO FIRESTORE
-========================================================= */
-
-async function saveDay() {
-
-    const pending =
-        VEHICLES.filter(
-            vehicle => {
-
-                const item =
-                    selectedDayData[
-                        vehicle.route
-                    ];
-
-
-                return !(
-                    item &&
-                    item.completed === true
-                );
-
-            }
-        );
-
-
-    const missingRemarks =
-        pending.filter(
-            vehicle => {
-
-                const item =
-                    selectedDayData[
-                        vehicle.route
-                    ];
-
-
-                return !(
-                    item &&
-                    item.remark &&
-                    item.remark.trim()
-                );
-
-            }
-        );
-
-
-    if(
-        missingRemarks.length > 0
-    ) {
-
-        showToast(
-            `Enter remarks for ${missingRemarks.length} pending vehicle(s).`,
-            "error"
-        );
-
-
-        scrollToVehicle(
-            missingRemarks[0].route
-        );
-
-
-        return;
-
-    }
-
-
-    try {
-
-        showLoading(
-            true
-        );
-
-
-        await setDoc(
-            dayRef(selectedDate),
-            {
-
-                date:
-                    dateKey(
-                        selectedDate
-                    ),
-
-                vehicles:
-                    selectedDayData,
-
-                updatedAt:
-                    serverTimestamp(),
-
-                updatedBy:
-                    currentUser
-                        ? currentUser.email
-                        : ""
-
-            },
-            {
-                merge:
-                    true
-            }
-        );
-
-
-        showToast(
-            isCompleteSelectedDay()
-                ? "🎉 All 45 vehicles completed and saved!"
-                : "Daily data saved successfully.",
-            "success"
-        );
-
-
-        await loadCalendarStatus();
-
-
-    } catch(error) {
-
-        console.error(error);
-
-        showToast(
-            "Unable to save data. Check Firebase permissions.",
-            "error"
-        );
-
-    } finally {
-
-        showLoading(
-            false
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CHECK CURRENT DAY
-========================================================= */
-
-function isCompleteSelectedDay() {
-
-    return VEHICLES.every(
-        vehicle => {
-
-            return (
-                selectedDayData[
-                    vehicle.route
-                ] &&
-                selectedDayData[
-                    vehicle.route
-                ].completed === true
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SCROLL VEHICLE
-========================================================= */
-
-function scrollToVehicle(route) {
-
-    const cards =
-        document.querySelectorAll(
-            ".vehicle-card"
-        );
-
-
-    for(
-        const card of cards
-    ) {
-
-        const number =
-            card.querySelector(
-                ".vehicle-number"
-            );
-
-
-        if(
-            number &&
-            number.textContent.trim() === route
-        ) {
-
-            card.scrollIntoView({
-                behavior:
-                    "smooth",
-
-                block:
-                    "center"
-            });
-
-
-            const remark =
-                card.querySelector(
-                    ".remark-input"
-                );
-
-
-            if(remark) {
-
-                setTimeout(
-                    () => remark.focus(),
-                    350
-                );
-
-            }
-
-
-            break;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   RESET DAY
-========================================================= */
-
-async function resetDay() {
-
-    const confirmReset =
-        confirm(
-            `Delete all saved data for ${displayDate(selectedDate)}?`
-        );
-
-
-    if(!confirmReset) {
-
-        return;
-
-    }
-
-
-    try {
-
-        showLoading(true);
-
-
-        await deleteDoc(
-            dayRef(selectedDate)
-        );
-
-
-        selectedDayData =
-            {};
-
-
-        showToast(
-            "Day reset successfully.",
-            "success"
-        );
-
-
-    } catch(error) {
-
-        console.error(error);
-
-        showToast(
-            "Unable to reset the day.",
-            "error"
-        );
-
-    } finally {
-
-        showLoading(false);
-
-    }
-
-}
-
-
-/* =========================================================
-   WHATSAPP MESSAGE
-========================================================= */
-
-function generateWhatsAppMessage() {
-
-    const completed =
-        VEHICLES.filter(
-            vehicle => {
-
-                return (
-                    selectedDayData[
-                        vehicle.route
-                    ] &&
-                    selectedDayData[
-                        vehicle.route
-                    ].completed === true
-                );
-
-            }
-        );
-
-
-    const pending =
-        VEHICLES.filter(
-            vehicle => {
-
-                return !(
-                    selectedDayData[
-                        vehicle.route
-                    ] &&
-                    selectedDayData[
-                        vehicle.route
-                    ].completed === true
-                );
-
-            }
-        );
-
-
-    const ekaCompleted =
-        completed.filter(
-            v => v.operator === "EKA"
-        );
-
-
-    const olectraCompleted =
-        completed.filter(
-            v => v.operator === "OLECTRA"
-        );
-
-
-    const ekaPending =
-        pending.filter(
-            v => v.operator === "EKA"
-        );
-
-
-    const olectraPending =
-        pending.filter(
-            v => v.operator === "OLECTRA"
-        );
-
-
-    let message =
-        `Date: ${displayDate(selectedDate)}\n\n`;
-
-
-    message +=
-        `COMPLETED:\n\n`;
-
-
-    message +=
-        `EKA: ${
-            ekaCompleted.length
-                ? ekaCompleted
-                    .map(v => v.route)
-                    .join(", ")
-                : "-"
-        }\n\n`;
-
-
-    message +=
-        `OLECTRA: ${
-            olectraCompleted.length
-                ? olectraCompleted
-                    .map(v => v.route)
-                    .join(", ")
-                : "-"
-        }`;
-
-
-    if(
-        pending.length > 0
-    ) {
-
-        message +=
-            `\n\nPENDING:\n\n`;
-
-
-        if(
-            ekaPending.length
-        ) {
-
-            message +=
-                `EKA:\n`;
-
-
-            ekaPending.forEach(
-                vehicle => {
-
-                    const item =
-                        selectedDayData[
-                            vehicle.route
-                        ] || {};
-
-
-                    message +=
-                        `• ${vehicle.route} - ` +
-                        `${vehicle.person} - ` +
-                        `${item.remark || "Remark not entered"}\n`;
-
-                }
-            );
-
-
-            message +=
-                `\n`;
-
-        }
-
-
-        if(
-            olectraPending.length
-        ) {
-
-            message +=
-                `OLECTRA:\n`;
-
-
-            olectraPending.forEach(
-                vehicle => {
-
-                    const item =
-                        selectedDayData[
-                            vehicle.route
-                        ] || {};
-
-
-                    message +=
-                        `• ${vehicle.route} - ` +
-                        `${vehicle.person} - ` +
-                        `${item.remark || "Remark not entered"}\n`;
-
-                }
-            );
-
-        }
-
-    }
-
-
-    return message.trim();
-
-}
-
-
-/* =========================================================
-   WHATSAPP MODAL
-========================================================= */
-
-function openWhatsAppModal() {
-
-    messagePreview.textContent =
-        generateWhatsAppMessage();
-
-
-    whatsappModal.classList.add(
-        "show"
-    );
-
-}
-
-
-/* =========================================================
-   COPY
-========================================================= */
-
-async function copyMessage() {
-
-    const message =
-        generateWhatsAppMessage();
-
-
-    try {
-
-        await navigator.clipboard.writeText(
-            message
-        );
-
-
-        showToast(
-            "WhatsApp message copied.",
-            "success"
-        );
-
-    } catch(error) {
-
-        const textarea =
-            document.createElement(
-                "textarea"
-            );
-
-
-        textarea.value =
-            message;
-
-
-        document.body.appendChild(
-            textarea
-        );
-
-
-        textarea.select();
-
-
-        document.execCommand(
-            "copy"
-        );
-
-
-        textarea.remove();
-
-
-        showToast(
-            "WhatsApp message copied.",
-            "success"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   OPEN WHATSAPP
-========================================================= */
-
-function openWhatsApp() {
-
-    const message =
-        generateWhatsAppMessage();
-
-
-    const url =
-        "https://wa.me/?text=" +
-        encodeURIComponent(
-            message
-        );
-
-
-    window.open(
-        url,
-        "_blank"
-    );
-
-}
-
-
-/* =========================================================
-   PERSON FILTER
-========================================================= */
-
-function populatePeople() {
-
-    const people =
-        [
-            ...new Set(
-                VEHICLES.map(
-                    v => v.person
-                )
-            )
-        ];
-
-
-    people.forEach(
-        person => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                person;
-
-
-            option.textContent =
-                person;
-
-
-            personFilter.appendChild(
-                option
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MONTH NAVIGATION
-========================================================= */
-
-document.getElementById(
-    "previousMonth"
-).addEventListener(
-    "click",
-    async () => {
-
-        const previous =
-            new Date(
-                calendarMonth.getFullYear(),
-                calendarMonth.getMonth() - 1,
-                1
-            );
-
-
-        const minimum =
-            new Date(
-                START_DATE.getFullYear(),
-                START_DATE.getMonth(),
-                1
-            );
-
-
-        if(
-            previous < minimum
-        ) {
+            selectedDateSubtitle.textContent =
+              "Unable to load data";
 
             showToast(
-                "Calendar starts from 15 September 2026."
+              "Unable to load Firestore data.",
+              "error"
             );
 
-            return;
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       FILTERING
+       ========================================================= */
+
+    searchInput.addEventListener(
+      "input",
+      renderVehicleList
+    );
+
+    statusFilter.addEventListener(
+      "change",
+      renderVehicleList
+    );
+
+    personFilter.addEventListener(
+      "change",
+      renderVehicleList
+    );
+
+
+    function getFilteredVehicles() {
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+      const status =
+        statusFilter.value;
+
+      const person =
+        personFilter.value;
+
+      return selectedDayData.filter(
+        vehicle => {
+
+          const searchMatch =
+            !search ||
+            vehicle.route
+              .toLowerCase()
+              .includes(search) ||
+            vehicle.brand
+              .toLowerCase()
+              .includes(search) ||
+            vehicle.person
+              .toLowerCase()
+              .includes(search);
+
+          const statusMatch =
+            status === "ALL" ||
+            (
+              status === "COMPLETED" &&
+              vehicle.completed
+            ) ||
+            (
+              status === "PENDING" &&
+              !vehicle.completed
+            );
+
+          const personMatch =
+            person === "ALL" ||
+            vehicle.person === person;
+
+          return (
+            searchMatch &&
+            statusMatch &&
+            personMatch
+          );
 
         }
-
-
-        calendarMonth =
-            previous;
-
-
-        await loadCalendarStatus();
+      );
 
     }
-);
 
 
-document.getElementById(
-    "nextMonth"
-).addEventListener(
-    "click",
-    async () => {
+    /* =========================================================
+       VEHICLE LIST
+       ========================================================= */
 
-        calendarMonth =
-            new Date(
-                calendarMonth.getFullYear(),
-                calendarMonth.getMonth() + 1,
-                1
+    function renderVehicleList() {
+
+      vehicleList.innerHTML = "";
+
+      const filtered =
+        getFilteredVehicles();
+
+      if (
+        filtered.length === 0
+      ) {
+
+        const empty =
+          document.createElement("div");
+
+        empty.className =
+          "empty-state";
+
+        empty.textContent =
+          "No vehicles match the selected filters.";
+
+        vehicleList.appendChild(
+          empty
+        );
+
+        updateSelectAllState();
+
+        return;
+
+      }
+
+
+      filtered.forEach(
+        vehicle => {
+
+          const card =
+            document.createElement("div");
+
+          card.className =
+            "vehicle-card";
+
+          card.classList.add(
+            vehicle.completed
+              ? "completed"
+              : "pending"
+          );
+
+
+          const main =
+            document.createElement("div");
+
+          main.className =
+            "vehicle-main";
+
+
+          const checkbox =
+            document.createElement("input");
+
+          checkbox.type =
+            "checkbox";
+
+          checkbox.className =
+            "vehicle-checkbox";
+
+          checkbox.checked =
+            vehicle.completed;
+
+
+          checkbox.addEventListener(
+            "change",
+            () => {
+
+              vehicle.completed =
+                checkbox.checked;
+
+              if (
+                vehicle.completed
+              ) {
+
+                /*
+                  We keep the existing
+                  remark instead of deleting it.
+                */
+
+              }
+
+              renderVehicleList();
+
+              updateSummary();
+
+            }
+          );
+
+
+          const info =
+            document.createElement("div");
+
+
+          const route =
+            document.createElement("div");
+
+          route.className =
+            "vehicle-route";
+
+          route.textContent =
+            vehicle.route;
+
+
+          const meta =
+            document.createElement("div");
+
+          meta.className =
+            "vehicle-meta";
+
+
+          const brand =
+            document.createElement("span");
+
+          brand.className =
+            "vehicle-brand";
+
+          brand.textContent =
+            vehicle.brand;
+
+
+          const person =
+            document.createElement("span");
+
+          person.className =
+            "vehicle-person";
+
+          person.textContent =
+            vehicle.person;
+
+
+          meta.appendChild(
+            brand
+          );
+
+          meta.appendChild(
+            person
+          );
+
+
+          info.appendChild(
+            route
+          );
+
+          info.appendChild(
+            meta
+          );
+
+
+          const badge =
+            document.createElement("span");
+
+          badge.className =
+            "status-badge";
+
+          badge.classList.add(
+            vehicle.completed
+              ? "status-completed"
+              : "status-pending"
+          );
+
+          badge.textContent =
+            vehicle.completed
+              ? "COMPLETED"
+              : "PENDING";
+
+
+          main.appendChild(
+            checkbox
+          );
+
+          main.appendChild(
+            info
+          );
+
+          main.appendChild(
+            badge
+          );
+
+
+          card.appendChild(
+            main
+          );
+
+
+          /*
+            REMARKS TEXTAREA
+          */
+
+          if (
+            !vehicle.completed
+          ) {
+
+            const remarksWrap =
+              document.createElement("div");
+
+            remarksWrap.className =
+              "remarks-wrap";
+
+
+            const remarksLabel =
+              document.createElement("label");
+
+            remarksLabel.className =
+              "remarks-label";
+
+            remarksLabel.textContent =
+              "Pending Reason / Remarks";
+
+
+            const remarks =
+              document.createElement("textarea");
+
+            remarks.className =
+              "remarks-input";
+
+            remarks.placeholder =
+              "Enter the reason for pending...";
+
+            remarks.value =
+              vehicle.remark || "";
+
+
+            /*
+              IMPORTANT:
+              Stop click/change events
+              from accidentally affecting
+              vehicle checkbox/card.
+            */
+
+            remarks.addEventListener(
+              "click",
+              event => {
+
+                event.stopPropagation();
+
+              }
             );
 
 
-        await loadCalendarStatus();
+            remarks.addEventListener(
+              "input",
+              event => {
+
+                vehicle.remark =
+                  event.target.value;
+
+              }
+            );
+
+
+            remarks.addEventListener(
+              "keydown",
+              event => {
+
+                event.stopPropagation();
+
+              }
+            );
+
+
+            remarksWrap.appendChild(
+              remarksLabel
+            );
+
+            remarksWrap.appendChild(
+              remarks
+            );
+
+            card.appendChild(
+              remarksWrap
+            );
+
+          }
+
+
+          vehicleList.appendChild(
+            card
+          );
+
+        }
+      );
+
+
+      updateSelectAllState();
 
     }
-);
 
 
-/* =========================================================
-   TODAY
-========================================================= */
+    /* =========================================================
+       SELECT ALL
+       ========================================================= */
 
-document.getElementById(
-    "todayButton"
-).addEventListener(
-    "click",
-    async () => {
+    selectAllVehicles.addEventListener(
+      "change",
+      () => {
 
-        const today =
-            new Date();
+        const checked =
+          selectAllVehicles.checked;
+
+        /*
+          Select All applies to
+          the complete 45 vehicle list,
+          not just the currently filtered list.
+        */
+
+        selectedDayData.forEach(
+          vehicle => {
+
+            vehicle.completed =
+              checked;
+
+          }
+        );
+
+        renderVehicleList();
+
+        updateSummary();
+
+      }
+    );
 
 
-        if(
-            beforeStart(today)
+    clearAllBtn.addEventListener(
+      "click",
+      () => {
+
+        selectedDayData.forEach(
+          vehicle => {
+
+            vehicle.completed =
+              false;
+
+          }
+        );
+
+        renderVehicleList();
+
+        updateSummary();
+
+      }
+    );
+
+
+    function updateSelectAllState() {
+
+      const total =
+        selectedDayData.length;
+
+      const completed =
+        selectedDayData.filter(
+          v => v.completed
+        ).length;
+
+      if (
+        total === 0
+      ) {
+
+        selectAllVehicles.checked =
+          false;
+
+        selectAllVehicles.indeterminate =
+          false;
+
+        return;
+
+      }
+
+      if (
+        completed === total
+      ) {
+
+        selectAllVehicles.checked =
+          true;
+
+        selectAllVehicles.indeterminate =
+          false;
+
+      } else if (
+        completed > 0
+      ) {
+
+        selectAllVehicles.checked =
+          false;
+
+        selectAllVehicles.indeterminate =
+          true;
+
+      } else {
+
+        selectAllVehicles.checked =
+          false;
+
+        selectAllVehicles.indeterminate =
+          false;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SUMMARY
+       ========================================================= */
+
+    function updateSummary() {
+
+      const total =
+        selectedDayData.length;
+
+      const completed =
+        selectedDayData.filter(
+          v => v.completed
+        ).length;
+
+      const pending =
+        total - completed;
+
+      const percent =
+        total === 0
+          ? 0
+          : Math.round(
+              completed / total * 100
+            );
+
+      totalCount.textContent =
+        total;
+
+      completedCount.textContent =
+        completed;
+
+      pendingCount.textContent =
+        pending;
+
+      completionPercent.textContent =
+        `${percent}%`;
+
+    }
+
+
+    /* =========================================================
+       SAVE
+       ========================================================= */
+
+    saveBtn.addEventListener(
+      "click",
+      saveDay
+    );
+
+
+    async function saveDay() {
+
+      if (
+        !currentUser
+      ) {
+
+        showToast(
+          "Please login again.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      /*
+        IMPORTANT CHANGE:
+
+        We DO NOT require all 45 vehicles
+        to have remarks.
+
+        Users can save their own work even
+        when another person's vehicles
+        are still pending.
+
+        However, if a vehicle is pending,
+        we warn about missing remarks.
+        We do NOT block saving.
+      */
+
+      const pendingWithoutReason =
+        selectedDayData.filter(
+          vehicle =>
+            !vehicle.completed &&
+            !vehicle.remark.trim()
+        );
+
+
+      saveBtn.disabled =
+        true;
+
+      saveBtn.textContent =
+        "Saving...";
+
+
+      try {
+
+        await setDoc(
+          dayRef(selectedDate),
+
+          {
+
+            date:
+              dateKey(selectedDate),
+
+            vehicles:
+              selectedDayData,
+
+            updatedAt:
+              serverTimestamp(),
+
+            updatedBy:
+              currentUser.email || ""
+
+          },
+
+          {
+            merge: true
+          }
+
+        );
+
+
+        if (
+          pendingWithoutReason.length > 0
         ) {
 
-            selectedDate =
-                new Date(
-                    START_DATE
-                );
-
-            calendarMonth =
-                new Date(
-                    START_DATE.getFullYear(),
-                    START_DATE.getMonth(),
-                    1
-                );
+          showToast(
+            `Saved. ${pendingWithoutReason.length} pending vehicle(s) still have no reason.`,
+            "info"
+          );
 
         } else {
 
-            selectedDate =
-                new Date(
-                    today.getFullYear(),
-                    today.getMonth(),
-                    today.getDate()
-                );
-
-
-            calendarMonth =
-                new Date(
-                    today.getFullYear(),
-                    today.getMonth(),
-                    1
-                );
+          showToast(
+            "Saved successfully. Other persons can continue their work.",
+            "success"
+          );
 
         }
 
 
-        subscribeToSelectedDay();
+        /*
+          Refresh calendar statuses.
+        */
 
-        await loadCalendarStatus();
+        renderCalendar();
+
+
+      } catch (error) {
+
+        console.error(
+          "Save error:",
+          error
+        );
+
+        showToast(
+          `Save failed: ${error.message}`,
+          "error"
+        );
+
+      } finally {
+
+        saveBtn.disabled =
+          false;
+
+        saveBtn.textContent =
+          "Save";
+
+      }
 
     }
-);
 
 
-/* =========================================================
-   BUTTONS
-========================================================= */
+    /* =========================================================
+       RESET DAY
+       ========================================================= */
 
-document.getElementById(
-    "saveButton"
-).addEventListener(
-    "click",
-    saveDay
-);
+    resetBtn.addEventListener(
+      "click",
+      async () => {
 
+        const confirmed =
+          confirm(
+            `Reset all data for ${displayDate(selectedDate)}?`
+          );
 
-document.getElementById(
-    "resetButton"
-).addEventListener(
-    "click",
-    resetDay
-);
+        if (!confirmed) {
 
-
-document.getElementById(
-    "whatsappButton"
-).addEventListener(
-    "click",
-    openWhatsAppModal
-);
-
-
-document.getElementById(
-    "copyButton"
-).addEventListener(
-    "click",
-    copyMessage
-);
-
-
-document.getElementById(
-    "modalCopyButton"
-).addEventListener(
-    "click",
-    copyMessage
-);
-
-
-document.getElementById(
-    "openWhatsAppButton"
-).addEventListener(
-    "click",
-    openWhatsApp
-);
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
-function closeModal() {
-
-    whatsappModal.classList.remove(
-        "show"
-    );
-
-}
-
-
-document.getElementById(
-    "closeModal"
-).addEventListener(
-    "click",
-    closeModal
-);
-
-
-document.getElementById(
-    "modalCloseButton"
-).addEventListener(
-    "click",
-    closeModal
-);
-
-
-whatsappModal.addEventListener(
-    "click",
-    event => {
-
-        if(
-            event.target ===
-            whatsappModal
-        ) {
-
-            closeModal();
+          return;
 
         }
 
-    }
-);
 
+        try {
 
-/* =========================================================
-   FILTERS
-========================================================= */
+          await deleteDoc(
+            dayRef(selectedDate)
+          );
 
-searchInput.addEventListener(
-    "input",
-    renderVehicles
-);
+          showToast(
+            "Day reset successfully.",
+            "success"
+          );
 
+          renderCalendar();
 
-statusFilter.addEventListener(
-    "change",
-    renderVehicles
-);
+        } catch (error) {
 
+          console.error(
+            error
+          );
 
-personFilter.addEventListener(
-    "change",
-    renderVehicles
-);
+          showToast(
+            `Reset failed: ${error.message}`,
+            "error"
+          );
 
+        }
 
-/* =========================================================
-   LOADING
-========================================================= */
-
-function showLoading(
-    show
-) {
-
-    loadingScreen.classList.toggle(
-        "show",
-        show
-    );
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function showToast(
-    message,
-    type = ""
-) {
-
-    const container =
-        document.getElementById(
-            "toastContainer"
-        );
-
-
-    const toast =
-        document.createElement(
-            "div"
-        );
-
-
-    toast.className =
-        `toast ${type}`;
-
-
-    toast.textContent =
-        message;
-
-
-    container.appendChild(
-        toast
+      }
     );
 
 
-    setTimeout(
-        () => {
+    /* =========================================================
+       DATE TOOLTIP
+       ========================================================= */
 
-            toast.remove();
-
-        },
-        3500
-    );
-
-}
-
-
-/* =========================================================
-   INITIALIZE APP
-========================================================= */
-
-async function initializeAppUI() {
-
-    populatePeople();
-
-
-    const today =
-        new Date();
-
-
-    if(
-        !beforeStart(today)
+    async function showDateTooltip(
+      date,
+      target
     ) {
 
-        selectedDate =
-            new Date(
-                today.getFullYear(),
-                today.getMonth(),
-                today.getDate()
-            );
+      clearTimeout(
+        tooltipTimer
+      );
+
+      tooltipTimer =
+        setTimeout(
+          async () => {
+
+            try {
+
+              const snapshot =
+                await getDoc(
+                  dayRef(date)
+                );
+
+              if (
+                !snapshot.exists()
+              ) {
+
+                dateTooltip.innerHTML = `
+                  <div class="tooltip-title">
+                    ${displayDate(date)}
+                  </div>
+                  <div>
+                    No report saved yet.
+                  </div>
+                `;
+
+              } else {
+
+                const vehicles =
+                  normalizeVehicles(
+                    snapshot.data()
+                  );
+
+                const pending =
+                  vehicles.filter(
+                    v =>
+                      !v.completed
+                  );
 
 
-        calendarMonth =
-            new Date(
-                today.getFullYear(),
-                today.getMonth(),
-                1
-            );
+                if (
+                  pending.length === 0
+                ) {
+
+                  dateTooltip.innerHTML = `
+                    <div class="tooltip-title">
+                      ${displayDate(date)}
+                    </div>
+                    <div>
+                      All 45 vehicles completed.
+                    </div>
+                  `;
+
+                } else {
+
+                  let html = `
+                    <div class="tooltip-title">
+                      Pending — ${displayDate(date)}
+                    </div>
+                  `;
+
+                  pending.forEach(
+                    vehicle => {
+
+                      html += `
+                        <div class="tooltip-item">
+
+                          <div class="tooltip-route">
+                            ${escapeHtml(vehicle.brand)}
+                            —
+                            ${escapeHtml(vehicle.route)}
+                          </div>
+
+                          <div class="tooltip-person">
+                            ${escapeHtml(vehicle.person)}
+                          </div>
+
+                          <div class="tooltip-reason">
+                            ${escapeHtml(
+                              vehicle.remark ||
+                              "Reason not entered"
+                            )}
+                          </div>
+
+                        </div>
+                      `;
+
+                    }
+                  );
+
+                  dateTooltip.innerHTML =
+                    html;
+
+                }
+
+              }
+
+
+              positionTooltip(
+                target
+              );
+
+              dateTooltip.style.display =
+                "block";
+
+
+            } catch (error) {
+
+              console.error(
+                error
+              );
+
+            }
+
+          },
+          200
+        );
 
     }
 
 
-    renderVehicles();
+    function positionTooltip(
+      target
+    ) {
 
-    subscribeToSelectedDay();
+      const rect =
+        target.getBoundingClientRect();
 
-    await loadCalendarStatus();
+      const tooltipWidth =
+        310;
 
-}
+      let left =
+        rect.left;
+
+      let top =
+        rect.bottom + 8;
 
 
-/* =========================================================
-   INITIAL
-========================================================= */
+      if (
+        left + tooltipWidth >
+        window.innerWidth - 10
+      ) {
 
-</script>
+        left =
+          window.innerWidth -
+          tooltipWidth -
+          10;
+
+      }
+
+
+      if (
+        top + 300 >
+        window.innerHeight
+      ) {
+
+        top =
+          rect.top - 310;
+
+      }
+
+
+      dateTooltip.style.left =
+        `${Math.max(10, left)}px`;
+
+      dateTooltip.style.top =
+        `${Math.max(10, top)}px`;
+
+    }
+
+
+    function hideDateTooltip() {
+
+      clearTimeout(
+        tooltipTimer
+      );
+
+      dateTooltip.style.display =
+        "none";
+
+    }
+
+
+    /* =========================================================
+       WHATSAPP MESSAGE GENERATOR
+       ========================================================= */
+
+    generateWhatsAppBtn.addEventListener(
+      "click",
+      () => {
+
+        const person =
+          whatsappPerson.value;
+
+        const message =
+          buildWhatsAppMessage(
+            person
+          );
+
+        whatsappMessage.value =
+          message;
+
+        showToast(
+          "WhatsApp message generated.",
+          "success"
+        );
+
+      }
+    );
+
+
+    function buildWhatsAppMessage(
+      selectedPerson
+    ) {
+
+      let vehicles =
+        [...selectedDayData];
+
+
+      /*
+        PERSON FILTER
+
+        ALL = everyone
+
+        Individual =
+        only that person's vehicles
+      */
+
+      if (
+        selectedPerson !== "ALL"
+      ) {
+
+        vehicles =
+          vehicles.filter(
+            vehicle =>
+              vehicle.person ===
+              selectedPerson
+          );
+
+      }
+
+
+      const completed =
+        vehicles.filter(
+          v =>
+            v.completed
+        );
+
+
+      const pending =
+        vehicles.filter(
+          v =>
+            !v.completed
+        );
+
+
+      const lines = [];
+
+
+      lines.push(
+        `*VEHICLE COMPLETION REPORT*`
+      );
+
+      lines.push(
+        `Date: ${displayDate(selectedDate)}`
+      );
+
+
+      if (
+        selectedPerson === "ALL"
+      ) {
+
+        lines.push(
+          `Person: All Persons`
+        );
+
+      } else {
+
+        lines.push(
+          `Person: ${selectedPerson}`
+        );
+
+      }
+
+
+      lines.push("");
+
+
+      /* =======================================================
+         COMPLETED
+         ======================================================= */
+
+      lines.push(
+        `*COMPLETED*`
+      );
+
+
+      const ekaCompleted =
+        completed.filter(
+          v =>
+            v.brand === "EKA"
+        );
+
+
+      const olectraCompleted =
+        completed.filter(
+          v =>
+            v.brand === "OLECTRA"
+        );
+
+
+      if (
+        ekaCompleted.length > 0
+      ) {
+
+        lines.push(
+          `EKA: ${ekaCompleted
+            .map(v => v.route)
+            .join(", ")}`
+        );
+
+      } else {
+
+        lines.push(
+          `EKA: -`
+        );
+
+      }
+
+
+      if (
+        olectraCompleted.length > 0
+      ) {
+
+        lines.push(
+          `OLECTRA: ${olectraCompleted
+            .map(v => v.route)
+            .join(", ")}`
+        );
+
+      } else {
+
+        lines.push(
+          `OLECTRA: -`
+        );
+
+      }
+
+
+      lines.push("");
+
+
+      /* =======================================================
+         PENDING
+         ======================================================= */
+
+      lines.push(
+        `*PENDING*`
+      );
+
+
+      if (
+        pending.length === 0
+      ) {
+
+        lines.push(
+          `None`
+        );
+
+      } else {
+
+        const ekaPending =
+          pending.filter(
+            v =>
+              v.brand === "EKA"
+          );
+
+
+        const olectraPending =
+          pending.filter(
+            v =>
+              v.brand === "OLECTRA"
+          );
+
+
+        if (
+          ekaPending.length > 0
+        ) {
+
+          lines.push(
+            `*EKA*`
+          );
+
+          ekaPending.forEach(
+            vehicle => {
+
+              lines.push(
+                `• ${vehicle.route} — ${vehicle.person} — ${vehicle.remark || "Reason not entered"}`
+              );
+
+            }
+          );
+
+        }
+
+
+        if (
+          olectraPending.length > 0
+        ) {
+
+          lines.push(
+            `*OLECTRA*`
+          );
+
+          olectraPending.forEach(
+            vehicle => {
+
+              lines.push(
+                `• ${vehicle.route} — ${vehicle.person} — ${vehicle.remark || "Reason not entered"}`
+              );
+
+            }
+          );
+
+        }
+
+      }
+
+
+      lines.push("");
+
+      lines.push(
+        `Completed: ${completed.length}/${vehicles.length}`
+      );
+
+
+      if (
+        selectedPerson === "ALL"
+      ) {
+
+        lines.push(
+          `Overall Status: ${
+            completed.length === VEHICLES.length
+              ? "ALL COMPLETED"
+              : "PENDING"
+          }`
+        );
+
+      } else {
+
+        lines.push(
+          `Person Status: ${
+            pending.length === 0
+              ? "ALL ASSIGNED VEHICLES COMPLETED"
+              : "PENDING"
+          }`
+
+        );
+
+      }
+
+
+      return lines.join("\n");
+
+    }
+
+
+    /* =========================================================
+       WHATSAPP SHARE
+       ========================================================= */
+
+    shareWhatsAppBtn.addEventListener(
+      "click",
+      async () => {
+
+        let message =
+          whatsappMessage.value.trim();
+
+
+        /*
+          If the user hasn't generated
+          a message yet, generate it
+          automatically using the selected
+          person.
+        */
+
+        if (!message) {
+
+          message =
+            buildWhatsAppMessage(
+              whatsappPerson.value
+            );
+
+          whatsappMessage.value =
+            message;
+
+        }
+
+
+        try {
+
+          if (
+            navigator.share
+          ) {
+
+            await navigator.share({
+
+              title:
+                "Vehicle Completion Report",
+
+              text:
+                message
+
+            });
+
+            return;
+
+          }
+
+        } catch (error) {
+
+          /*
+            User cancelled native share.
+            Do not show an error.
+          */
+
+          if (
+            error?.name ===
+            "AbortError"
+          ) {
+
+            return;
+
+          }
+
+        }
+
+
+        /*
+          Desktop / fallback:
+          Open WhatsApp Web.
+        */
+
+        const url =
+          "https://wa.me/?text=" +
+          encodeURIComponent(
+            message
+          );
+
+
+        window.open(
+          url,
+          "_blank",
+          "noopener,noreferrer"
+        );
+
+      }
+    );
+
+
+    /* =========================================================
+       COPY WHATSAPP MESSAGE
+       ========================================================= */
+
+    whatsappMessage.addEventListener(
+      "dblclick",
+      async () => {
+
+        const text =
+          whatsappMessage.value.trim();
+
+        if (!text) {
+
+          return;
+
+        }
+
+        try {
+
+          await navigator.clipboard.writeText(
+            text
+          );
+
+          showToast(
+            "WhatsApp message copied.",
+            "success"
+          );
+
+        } catch (error) {
+
+          whatsappMessage.select();
+
+          document.execCommand(
+            "copy"
+          );
+
+          showToast(
+            "WhatsApp message copied.",
+            "success"
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(value)
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =========================================================
+       WINDOW EVENTS
+       ========================================================= */
+
+    window.addEventListener(
+      "resize",
+      () => {
+
+        hideDateTooltip();
+
+      }
+    );
+
+
+    window.addEventListener(
+      "scroll",
+      () => {
+
+        hideDateTooltip();
+
+      },
+      true
+    );
+
+
+    /* =========================================================
+       INITIAL FILTER STATE
+       ========================================================= */
+
+    searchInput.value =
+      "";
+
+    statusFilter.value =
+      "ALL";
+
+    personFilter.value =
+      "ALL";
+
+    whatsappPerson.value =
+      "ALL";
+
+
+  </script>
 
 </body>
 </html>
