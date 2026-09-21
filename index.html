@@ -30,7 +30,6 @@
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #eff6ff;
-            --primary-border: #bfdbfe;
 
             --green: #10b981;
             --green-dark: #047857;
@@ -42,12 +41,11 @@
             --red-soft: #fef2f2;
             --red-border: #fecaca;
 
-            --orange: #f97316;
             --slate-900: #0f172a;
 
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-            --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.12), 0 10px 15px -5px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.12);
 
             --radius-sm: 8px;
             --radius-md: 12px;
@@ -57,16 +55,8 @@
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* =========================================================
-           RESET
-        ========================================================= */
         *, *::before, *::after {
             box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -84,9 +74,7 @@
             color: inherit;
         }
 
-        /* =========================================================
-           LOGIN SCREEN
-        ========================================================= */
+        /* LOGIN SCREEN */
         .login-screen {
             position: fixed;
             inset: 0;
@@ -125,7 +113,6 @@
             font-size: 22px;
             font-weight: 800;
             text-align: center;
-            letter-spacing: -0.02em;
         }
 
         .login-card p {
@@ -144,9 +131,7 @@
             margin-bottom: 6px;
             font-size: 12px;
             font-weight: 700;
-            color: var(--text);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         .login-field input {
@@ -156,13 +141,11 @@
             border-radius: var(--radius-md);
             outline: none;
             background: var(--surface-soft);
-            transition: var(--transition);
         }
 
         .login-field input:focus {
             border-color: var(--primary);
             background: var(--surface);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
         }
 
         .login-button {
@@ -176,13 +159,6 @@
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .login-button:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
         }
 
         .login-error {
@@ -198,13 +174,9 @@
             font-weight: 600;
         }
 
-        .login-error.show {
-            display: block;
-        }
+        .login-error.show { display: block; }
 
-        /* =========================================================
-           LOADING OVERLAY
-        ========================================================= */
+        /* LOADING OVERLAY */
         .loading-screen {
             position: fixed;
             inset: 0;
@@ -216,9 +188,7 @@
             backdrop-filter: blur(6px);
         }
 
-        .loading-screen.show {
-            display: flex;
-        }
+        .loading-screen.show { display: flex; }
 
         .loader-card {
             background: var(--surface);
@@ -226,7 +196,6 @@
             border-radius: var(--radius-lg);
             text-align: center;
             box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
         }
 
         .spinner {
@@ -239,26 +208,12 @@
             animation: spin 0.75s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* =========================================================
-           APP LAYOUT
-        ========================================================= */
-        #app {
-            display: none;
-            min-height: 100vh;
-        }
+        /* APP LAYOUT */
+        #app { display: none; min-height: 100vh; flex-direction: column; }
+        #app.visible { display: flex; }
 
-        #app.visible {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* =========================================================
-           HEADER
-        ========================================================= */
         .header {
             position: sticky;
             top: 0;
@@ -267,7 +222,6 @@
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow-md);
         }
 
         .header-inner {
@@ -277,15 +231,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
+        .brand { display: flex; align-items: center; gap: 14px; }
         .brand-icon {
             width: 42px;
             height: 42px;
@@ -294,42 +242,14 @@
             border-radius: var(--radius-md);
             background: rgba(255, 255, 255, 0.12);
             font-size: 22px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
         }
+        .brand h1 { margin: 0; font-size: 18px; font-weight: 800; }
+        .brand p { margin: 2px 0 0; font-size: 11px; opacity: 0.7; }
 
-        .brand h1 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-        }
-
-        .brand p {
-            margin: 2px 0 0;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.65);
-            font-weight: 500;
-        }
-
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .user-info {
-            text-align: right;
-        }
-
-        .user-name {
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .user-email {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
-        }
+        .user-area { display: flex; align-items: center; gap: 14px; }
+        .user-info { text-align: right; }
+        .user-name { font-size: 13px; font-weight: 700; }
+        .user-email { font-size: 11px; opacity: 0.6; }
 
         .logout-btn {
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -340,16 +260,8 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
-            transition: var(--transition);
         }
 
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
-
-        /* =========================================================
-           MAIN CONTAINER & WORKSPACE
-        ========================================================= */
         .main {
             width: min(1600px, 100%);
             margin: auto;
@@ -359,49 +271,28 @@
 
         .workspace {
             display: grid;
-            grid-template-columns: minmax(320px, 34%) minmax(0, 66%);
+            grid-template-columns: minmax(320px, 30%) minmax(0, 70%);
             gap: 24px;
             align-items: start;
         }
 
-        /* =========================================================
-           PANEL COMPONENT
-        ========================================================= */
         .panel {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: var(--transition);
         }
 
         .panel-header {
             padding: 18px 22px;
             border-bottom: 1px solid var(--border);
-            background: var(--surface);
         }
 
-        .panel-title h2 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text);
-        }
+        .panel-title h2 { margin: 0; font-size: 16px; font-weight: 800; }
+        .panel-title p { margin: 3px 0 0; color: var(--text-muted); font-size: 12px; }
 
-        .panel-title p {
-            margin: 3px 0 0;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        /* =========================================================
-           CALENDAR PANEL
-        ========================================================= */
-        .calendar-panel {
-            position: sticky;
-            top: 86px;
-        }
+        .calendar-panel { position: sticky; top: 86px; }
 
         .calendar-controls {
             padding: 14px 20px;
@@ -412,12 +303,7 @@
             background: var(--surface-soft);
         }
 
-        .month-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--text);
-            letter-spacing: -0.01em;
-        }
+        .month-title { font-size: 15px; font-weight: 800; }
 
         .icon-button {
             width: 36px;
@@ -429,19 +315,9 @@
             background: var(--surface);
             cursor: pointer;
             font-size: 16px;
-            color: var(--text);
-            transition: var(--transition);
         }
 
-        .icon-button:hover {
-            background: var(--surface-soft);
-            border-color: var(--border-hover);
-        }
-
-        .calendar {
-            padding: 16px;
-        }
-
+        .calendar { padding: 16px; }
         .weekdays, .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -454,7 +330,6 @@
             font-size: 10px;
             font-weight: 800;
             color: var(--text-muted);
-            letter-spacing: 0.05em;
         }
 
         .calendar-day {
@@ -467,71 +342,17 @@
             border: 1px solid transparent;
             border-radius: var(--radius-md);
             cursor: pointer;
-            transition: var(--transition);
             background: var(--surface-soft);
         }
 
-        .calendar-day.incomplete {
-            background: var(--red-soft);
-            color: var(--red-dark);
-            border-color: var(--red-border);
-        }
+        .calendar-day.incomplete { background: var(--red-soft); color: var(--red-dark); border-color: var(--red-border); }
+        .calendar-day.complete { background: var(--green-soft); color: var(--green-dark); border-color: var(--green-border); }
+        .calendar-day.selected { outline: 3px solid rgba(37, 99, 235, 0.3); border-color: var(--primary) !important; }
+        .calendar-day.disabled { opacity: 0.3; cursor: not-allowed; }
+        .calendar-day.empty { background: transparent; cursor: default; }
 
-        .calendar-day.complete {
-            background: var(--green-soft);
-            color: var(--green-dark);
-            border-color: var(--green-border);
-        }
-
-        .calendar-day:hover:not(.disabled):not(.empty) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .calendar-day.selected {
-            outline: 3px solid rgba(37, 99, 235, 0.3);
-            border-color: var(--primary) !important;
-            z-index: 2;
-        }
-
-        .calendar-day.today {
-            box-shadow: inset 0 0 0 2px var(--primary);
-        }
-
-        .calendar-day.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            background: var(--surface-soft);
-            border-color: transparent;
-        }
-
-        .calendar-day.empty {
-            background: transparent;
-            cursor: default;
-        }
-
-        .day-number {
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .day-status {
-            margin-top: 2px;
-            font-size: 8px;
-            font-weight: 800;
-            letter-spacing: 0.02em;
-        }
-
-        .day-dot {
-            position: absolute;
-            bottom: 6px;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-        }
-
-        .complete .day-dot { background: var(--green); }
-        .incomplete .day-dot { background: var(--red); }
+        .day-number { font-size: 13px; font-weight: 800; }
+        .day-status { font-size: 8px; font-weight: 800; margin-top: 2px; }
 
         .legend {
             padding: 12px 20px 16px;
@@ -545,50 +366,15 @@
             border-top: 1px solid var(--border);
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .legend-color {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; }
         .legend-green { background: var(--green); }
         .legend-red { background: var(--red); }
 
-        /* =========================================================
-           DETAILS PANEL & METRICS
-========================================================= */
-        .detail-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            background: var(--surface);
-        }
-
-        .selected-date {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
-
-        .selected-date h2 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-        }
-
-        .selected-date p {
-            margin: 3px 0 0;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 500;
-        }
+        .detail-header { padding: 20px 24px; border-bottom: 1px solid var(--border); }
+        .selected-date { display: flex; align-items: center; justify-content: space-between; }
+        .selected-date h2 { margin: 0; font-size: 20px; font-weight: 800; }
+        .selected-date p { margin: 3px 0 0; color: var(--text-muted); font-size: 12px; }
 
         .summary {
             padding: 16px 24px;
@@ -604,61 +390,18 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             background: var(--surface);
-            box-shadow: var(--shadow-sm);
         }
 
-        .summary-label {
-            color: var(--text-muted);
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .summary-value {
-            margin-top: 4px;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
+        .summary-label { color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .summary-value { margin-top: 4px; font-size: 22px; font-weight: 800; }
         .summary-card.completed .summary-value { color: var(--green-dark); }
         .summary-card.pending .summary-value { color: var(--red-dark); }
 
-        .progress-wrapper {
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
-            background: var(--surface);
-        }
+        .progress-wrapper { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+        .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+        .progress-bar { height: 10px; border-radius: var(--radius-full); background: var(--surface-soft); border: 1px solid var(--border); overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.4s ease; }
 
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .progress-bar {
-            height: 10px;
-            border-radius: var(--radius-full);
-            background: var(--surface-soft);
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #10b981, #059669);
-            transition: width 0.4s ease;
-            border-radius: var(--radius-full);
-        }
-
-        /* =========================================================
-           TOOLBAR
-========================================================= */
         .toolbar {
             padding: 14px 24px;
             display: flex;
@@ -669,12 +412,7 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .search {
-            position: relative;
-            flex: 1;
-            min-width: 200px;
-        }
-
+        .search { position: relative; flex: 1; min-width: 200px; }
         .search input {
             width: 100%;
             padding: 9px 12px 9px 36px;
@@ -683,22 +421,9 @@
             outline: none;
             background: var(--surface);
             font-size: 12px;
-            transition: var(--transition);
         }
 
-        .search input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .search span {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            opacity: 0.6;
-        }
+        .search span { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.6; }
 
         .filter {
             border: 1px solid var(--border);
@@ -708,17 +433,11 @@
             font-size: 12px;
             font-weight: 600;
             outline: none;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .filter:focus {
-            border-color: var(--primary);
         }
 
         /* =========================================================
-           VEHICLE LIST & CARDS
-========================================================= */
+           VEHICLE LIST & GRID LAYOUT (NEW ENHANCEMENTS)
+        ========================================================= */
         .vehicle-list {
             padding: 20px 24px;
             max-height: calc(100vh - 380px);
@@ -757,13 +476,17 @@
             border: 1px solid var(--border);
         }
 
-        .vehicle-card {
+        /* Responsive Grid Container for Vehicle Cards */
+        .vehicle-grid {
             display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .vehicle-card {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 14px;
             border: 1.5px solid var(--border);
             border-radius: var(--radius-md);
             background: var(--surface);
@@ -780,34 +503,44 @@
             border-color: var(--red-border);
         }
 
+        .vehicle-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .vehicle-main-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .vehicle-check {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             accent-color: var(--green);
             cursor: pointer;
-            border-radius: 6px;
         }
 
         .vehicle-number {
             font-size: 15px;
             font-weight: 800;
             color: var(--text);
-            letter-spacing: -0.01em;
         }
 
         .vehicle-person {
-            margin-top: 2px;
+            margin-top: 4px;
             color: var(--text-muted);
             font-size: 11px;
             font-weight: 600;
         }
 
         .status {
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: var(--radius-full);
             font-size: 9px;
             font-weight: 800;
-            letter-spacing: 0.05em;
         }
 
         .status.completed {
@@ -824,8 +557,7 @@
 
         .remark-area {
             display: none;
-            grid-column: 2 / 4;
-            margin-top: 6px;
+            margin-top: 10px;
         }
 
         .vehicle-card.pending .remark-area {
@@ -834,20 +566,14 @@
 
         .remark-input {
             width: 100%;
-            min-height: 52px;
+            min-height: 48px;
             resize: vertical;
-            padding: 10px;
+            padding: 8px 10px;
             border: 1px solid var(--red-border);
             border-radius: var(--radius-sm);
             outline: none;
             font-size: 12px;
             background: var(--surface);
-            transition: var(--transition);
-        }
-
-        .remark-input:focus {
-            border-color: var(--red);
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
         }
 
         .remark-required {
@@ -857,9 +583,6 @@
             font-weight: 700;
         }
 
-        /* =========================================================
-           ACTION BAR & BUTTONS
-========================================================= */
         .action-bar {
             padding: 16px 24px;
             display: flex;
@@ -880,61 +603,29 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
         }
 
         .btn-primary { color: white; background: var(--primary); }
-        .btn-primary:hover { background: var(--primary-dark); }
-
         .btn-success { color: white; background: var(--green); }
-        .btn-success:hover { background: var(--green-dark); }
-
         .btn-whatsapp { color: white; background: #059669; }
-        .btn-whatsapp:hover { background: #047857; }
-
         .btn-secondary { color: var(--text); background: var(--surface); border: 1px solid var(--border); }
-        .btn-secondary:hover { background: var(--surface-soft); border-color: var(--border-hover); }
-
         .btn-danger { color: var(--red-dark); background: var(--red-soft); border: 1px solid var(--red-border); }
-        .btn-danger:hover { background: #fde8e8; }
 
-        /* =========================================================
-           TOOLTIP & MODALS
-========================================================= */
         .date-tooltip {
             position: fixed;
             z-index: 9000;
-            width: 320px;
-            max-width: calc(100vw - 24px);
-            padding: 14px;
+            width: 280px;
+            padding: 12px;
             border-radius: var(--radius-md);
             background: var(--slate-900);
             color: white;
-            box-shadow: var(--shadow-lg);
             font-size: 12px;
             pointer-events: none;
             opacity: 0;
-            transform: translateY(4px);
-            transition: opacity 0.15s ease, transform 0.15s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: opacity 0.15s ease;
         }
 
-        .date-tooltip.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .tooltip-title {
-            font-weight: 800;
-            margin-bottom: 6px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            padding-bottom: 4px;
-        }
+        .date-tooltip.visible { opacity: 1; }
 
         .modal-overlay {
             position: fixed;
@@ -945,39 +636,20 @@
             justify-content: center;
             padding: 20px;
             background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(6px);
         }
 
-        .modal-overlay.show {
-            display: flex;
-        }
+        .modal-overlay.show { display: flex; }
 
         .modal {
             width: min(650px, 100%);
             border-radius: var(--radius-lg);
             background: var(--surface);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
             overflow: hidden;
         }
 
-        .modal-header {
-            padding: 18px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            font-size: 17px;
-            font-weight: 800;
-        }
-
-        .modal-body {
-            padding: 20px 24px;
-        }
+        .modal-header { padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+        .modal-header h3 { margin: 0; font-size: 17px; font-weight: 800; }
+        .modal-body { padding: 20px 24px; }
 
         .message-preview {
             white-space: pre-wrap;
@@ -989,85 +661,26 @@
             background: var(--surface-soft);
             font-family: 'JetBrains Mono', monospace;
             font-size: 12px;
-            line-height: 1.6;
-            color: var(--text);
         }
 
-        .modal-actions {
-            padding: 16px 24px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            border-top: 1px solid var(--border);
-            background: var(--surface-soft);
-        }
+        .modal-actions { padding: 16px 24px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border); background: var(--surface-soft); }
 
-        /* =========================================================
-           TOAST NOTIFICATIONS
-========================================================= */
-        .toast-container {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .toast {
-            padding: 12px 18px;
-            border-radius: var(--radius-md);
-            color: white;
-            background: var(--slate-900);
-            box-shadow: var(--shadow-lg);
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: slideIn 0.2s ease;
-        }
-
+        .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 8px; }
+        .toast { padding: 12px 18px; border-radius: var(--radius-md); color: white; background: var(--slate-900); font-size: 12px; font-weight: 600; }
         .toast.success { background: var(--green-dark); }
         .toast.error { background: var(--red-dark); }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* =========================================================
-           RESPONSIVE DESIGN
-========================================================= */
         @media (max-width: 1024px) {
-            .workspace {
-                grid-template-columns: 1fr;
-            }
-
-            .calendar-panel {
-                position: static;
-            }
-
-            .vehicle-list {
-                max-height: none;
-            }
+            .workspace { grid-template-columns: 1fr; }
+            .calendar-panel { position: static; }
+            .vehicle-list { max-height: none; }
         }
 
         @media (max-width: 640px) {
             .main { padding: 12px; }
-            .header-inner { padding: 12px 16px; }
-            .summary { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 12px; }
-            .summary-card { padding: 10px 12px; }
-            .summary-value { font-size: 18px; }
-            .toolbar { padding: 12px; flex-direction: column; align-items: stretch; }
-            .action-bar { padding: 12px; flex-direction: column; }
+            .summary { grid-template-columns: repeat(2, 1fr); }
+            .toolbar, .action-bar { flex-direction: column; align-items: stretch; }
             .btn { width: 100%; }
-            .selected-date { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .date-tooltip { display: none !important; }
-            .vehicle-card { grid-template-columns: auto 1fr; }
-            .vehicle-card > div:nth-child(3) { display: none; }
-            .user-email { display: none; }
         }
     </style>
 </head>
@@ -1282,16 +895,14 @@
         import { getFirestore, doc, setDoc, getDoc, onSnapshot, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
         /* FIREBASE CONFIGURATION */
-const firebaseConfig = {
-  apiKey: "AIzaSyCNiiNkriYSeIgtwFliMW9qa2zUzv9zHzs",
-  authDomain: "completion-status.firebaseapp.com",
-  projectId: "completion-status",
-  storageBucket: "completion-status.firebasestorage.app",
-  messagingSenderId: "714893759562",
-  appId: "1:714893759562:web:f314adacbb40aa33a8c2b3",
-  measurementId: "G-XVV2BXNN67"
-};
-
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNiiNkriYSeIgtwFliMW9qa2zUzv9zHzs",
+            authDomain: "completion-status.firebaseapp.com",
+            projectId: "completion-status",
+            storageBucket: "completion-status.firebasestorage.app",
+            messagingSenderId: "714893759562",
+            appId: "1:714893759562:web:f314adacbb40aa33a8c2b3"
+        };
 
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
@@ -1402,6 +1013,21 @@ const firebaseConfig = {
 
         function dayRef(date) { return doc(db, "dailyReports", dateKey(date)); }
 
+        /* Get currently active filtered vehicles */
+        function getFilteredVehicles() {
+            const search = searchInput.value.trim().toLowerCase();
+            const status = statusFilter.value;
+            const person = personFilter.value;
+
+            return VEHICLES.filter(v => {
+                const item = selectedDayData[v.route] || { completed: false, remark: "" };
+                const matchesSearch = !search || v.route.toLowerCase().includes(search) || v.person.toLowerCase().includes(search);
+                const matchesStatus = status === "all" || (status === "completed" && item.completed) || (status === "pending" && !item.completed);
+                const matchesPerson = person === "all" || v.person === person;
+                return matchesSearch && matchesStatus && matchesPerson;
+            });
+        }
+
         /* AUTH LOGIC */
         loginForm.addEventListener("submit", async e => {
             e.preventDefault();
@@ -1413,23 +1039,13 @@ const firebaseConfig = {
                 await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value);
             } catch (err) {
                 console.error(err);
-                loginError.textContent = friendlyAuthError(err.code);
+                loginError.textContent = "Invalid email or password.";
                 loginError.classList.add("show");
             } finally {
                 loginButton.disabled = false;
                 loginButton.textContent = "Sign In";
             }
         });
-
-        function friendlyAuthError(code) {
-            switch (code) {
-                case "auth/invalid-credential": return "Invalid email or password.";
-                case "auth/invalid-email": return "Please enter a valid email address.";
-                case "auth/user-disabled": return "This account has been disabled.";
-                case "auth/too-many-requests": return "Too many attempts. Please try again later.";
-                default: return "Unable to sign in. Please check your credentials.";
-            }
-        }
 
         onAuthStateChanged(auth, async user => {
             if (user) {
@@ -1451,7 +1067,7 @@ const firebaseConfig = {
             await signOut(auth);
         });
 
-        /* REAL-TIME DAY LISTENER (FOCUS-SAFE) */
+        /* REAL-TIME DAY LISTENER */
         function subscribeToSelectedDay() {
             if (unsubscribeDay) { unsubscribeDay(); unsubscribeDay = null; }
             selectedDayData = {};
@@ -1537,7 +1153,6 @@ const firebaseConfig = {
 
                 if (beforeStart(date)) cell.classList.add("disabled");
                 if (sameDay(date, selectedDate)) cell.classList.add("selected");
-                if (sameDay(date, new Date())) cell.classList.add("today");
 
                 const complete = isDayComplete(date);
                 if (!beforeStart(date)) {
@@ -1546,10 +1161,7 @@ const firebaseConfig = {
 
                 cell.innerHTML = `
                     <div class="day-number">${day}</div>
-                    ${!beforeStart(date) ? `
-                        <div class="day-status">${complete ? "DONE" : "PENDING"}</div>
-                        <span class="day-dot"></span>
-                    ` : ""}
+                    ${!beforeStart(date) ? `<div class="day-status">${complete ? "DONE" : "PENDING"}</div>` : ""}
                 `;
 
                 if (!beforeStart(date)) {
@@ -1559,69 +1171,17 @@ const firebaseConfig = {
                         subscribeToSelectedDay();
                         loadCalendarStatus();
                     });
-
-                    cell.addEventListener("mouseenter", e => showTooltip(date, e));
-                    cell.addEventListener("mousemove", moveTooltip);
-                    cell.addEventListener("mouseleave", hideTooltip);
                 }
 
                 calendarGrid.appendChild(cell);
             }
         }
 
-        /* TOOLTIP LOGIC */
-        function showTooltip(date, e) {
-            if (sameDay(date, selectedDate)) {
-                buildTooltip(date, selectedDayData);
-            } else {
-                getDoc(dayRef(date)).then(snapshot => {
-                    const data = snapshot.exists() ? (snapshot.data().vehicles || {}) : {};
-                    buildTooltip(date, data);
-                });
-            }
-            moveTooltip(e);
-            dateTooltip.classList.add("visible");
-        }
-
-        function buildTooltip(date, data) {
-            const pending = VEHICLES.filter(v => !(data[v.route] && data[v.route].completed === true));
-            if (pending.length === 0) {
-                dateTooltip.innerHTML = `
-                    <div class="tooltip-title">${displayDate(date)}</div>
-                    <div style="color:#a7f3d0;">✅ All ${VEHICLES.length} vehicles completed!</div>
-                `;
-            } else {
-                dateTooltip.innerHTML = `
-                    <div class="tooltip-title">${displayDate(date)}</div>
-                    <div>⏳ Pending Vehicles: <strong>${pending.length}</strong></div>
-                `;
-            }
-        }
-
-        function moveTooltip(e) {
-            const offset = 15;
-            let x = e.clientX + offset;
-            let y = e.clientY + offset;
-            const rect = dateTooltip.getBoundingClientRect();
-
-            if (x + rect.width > window.innerWidth - 10) x = e.clientX - rect.width - offset;
-            if (y + rect.height > window.innerHeight - 10) y = e.clientY - rect.height - offset;
-
-            dateTooltip.style.left = `${Math.max(10, x)}px`;
-            dateTooltip.style.top = `${Math.max(10, y)}px`;
-        }
-
-        function hideTooltip() { dateTooltip.classList.remove("visible"); }
-
-        /* VEHICLES LIST RENDERER */
+        /* VEHICLES LIST & GRID RENDERER */
         function renderVehicles() {
             const activeElement = document.activeElement;
             const activeRoute = activeElement && activeElement.classList.contains("remark-input") ? activeElement.dataset.route : null;
             const selectionStart = activeElement ? activeElement.selectionStart : null;
-
-            const search = searchInput.value.trim().toLowerCase();
-            const status = statusFilter.value;
-            const person = personFilter.value;
 
             let completed = 0;
             VEHICLES.forEach(v => {
@@ -1641,57 +1201,54 @@ const firebaseConfig = {
             selectedDateTitle.textContent = displayDate(selectedDate);
             selectedDateSubtitle.textContent = longDate(selectedDate);
 
+            const filteredVehicles = getFilteredVehicles();
+
             const groups = {
-                EKA: VEHICLES.filter(v => v.operator === "EKA"),
-                OLECTRA: VEHICLES.filter(v => v.operator === "OLECTRA")
+                EKA: filteredVehicles.filter(v => v.operator === "EKA"),
+                OLECTRA: filteredVehicles.filter(v => v.operator === "OLECTRA")
             };
 
             vehicleList.innerHTML = "";
             let visible = 0;
 
             Object.entries(groups).forEach(([operator, vehicles]) => {
-                const filtered = vehicles.filter(v => {
-                    const item = selectedDayData[v.route] || { completed: false, remark: "" };
-                    const matchesSearch = !search || v.route.toLowerCase().includes(search) || v.person.toLowerCase().includes(search);
-                    const matchesStatus = status === "all" || (status === "completed" && item.completed) || (status === "pending" && !item.completed);
-                    const matchesPerson = person === "all" || v.person === person;
-                    return matchesSearch && matchesStatus && matchesPerson;
-                });
-
-                if (filtered.length === 0) return;
-                visible += filtered.length;
+                if (vehicles.length === 0) return;
+                visible += vehicles.length;
 
                 const group = document.createElement("div");
                 group.className = "group";
-                const groupCompleted = filtered.filter(v => selectedDayData[v.route] && selectedDayData[v.route].completed).length;
+                const totalOperatorVehicles = VEHICLES.filter(v => v.operator === operator).length;
+                const groupCompleted = vehicles.filter(v => selectedDayData[v.route] && selectedDayData[v.route].completed).length;
 
                 group.innerHTML = `
                     <div class="group-header">
                         <div class="group-name">🚌 ${operator}</div>
-                        <div class="group-count">${groupCompleted}/${vehicles.length}</div>
+                        <div class="group-count">${groupCompleted}/${totalOperatorVehicles}</div>
                     </div>
+                    <div class="vehicle-grid"></div>
                 `;
 
-                filtered.forEach(v => {
+                const grid = group.querySelector(".vehicle-grid");
+
+                vehicles.forEach(v => {
                     const item = selectedDayData[v.route] || { completed: false, remark: "" };
                     const card = document.createElement("div");
                     card.className = `vehicle-card ${item.completed ? "completed" : "pending"}`;
 
                     card.innerHTML = `
-                        <input type="checkbox" class="vehicle-check" ${item.completed ? "checked" : ""}>
-                        <div>
-                            <div>
+                        <div class="vehicle-card-header">
+                            <div class="vehicle-main-info">
+                                <input type="checkbox" class="vehicle-check" ${item.completed ? "checked" : ""}>
                                 <span class="vehicle-number">${v.route}</span>
-                                <span class="status ${item.completed ? "completed" : "pending"}">
-                                    ${item.completed ? "COMPLETED" : "PENDING"}
-                                </span>
                             </div>
-                            <div class="vehicle-person">👤 Assigned: <strong>${v.person}</strong></div>
+                            <span class="status ${item.completed ? "completed" : "pending"}">
+                                ${item.completed ? "COMPLETED" : "PENDING"}
+                            </span>
                         </div>
-                        <div style="font-size: 16px; font-weight: 800;">${item.completed ? "✓" : "!"}</div>
+                        <div class="vehicle-person">👤 ${v.person}</div>
                         <div class="remark-area">
-                            <textarea class="remark-input" data-route="${v.route}" placeholder="Enter pending reason / remark...">${escapeHTML(item.remark || "")}</textarea>
-                            <div class="remark-required">* Remark is mandatory while pending.</div>
+                            <textarea class="remark-input" data-route="${v.route}" placeholder="Pending reason...">${escapeHTML(item.remark || "")}</textarea>
+                            <div class="remark-required">* Remark mandatory</div>
                         </div>
                     `;
 
@@ -1707,7 +1264,7 @@ const firebaseConfig = {
                         updateLocalVehicle(v.route, checkbox.checked, remark.value);
                     });
 
-                    group.appendChild(card);
+                    grid.appendChild(card);
                 });
 
                 vehicleList.appendChild(group);
@@ -1717,7 +1274,6 @@ const firebaseConfig = {
                 vehicleList.innerHTML = `<div style="padding:40px; text-align:center; color:var(--text-muted);">🔎<br><br>No vehicles found matching filters.</div>`;
             }
 
-            // Restore focus state if remark was actively being edited
             if (activeRoute) {
                 const inputToFocus = vehicleList.querySelector(`.remark-input[data-route="${activeRoute}"]`);
                 if (inputToFocus) {
@@ -1735,6 +1291,54 @@ const firebaseConfig = {
             dirtyRoutes.add(route);
         }
 
+        /* FILTERED SELECT ALL / CLEAR ALL (FIXED) */
+        function setFilteredVehiclesState(completed) {
+            const targetVehicles = getFilteredVehicles();
+
+            if (targetVehicles.length === 0) {
+                showToast("No vehicles match the active filter.", "error");
+                return;
+            }
+
+            targetVehicles.forEach(v => {
+                const existing = selectedDayData[v.route] || {};
+                selectedDayData[v.route] = {
+                    completed: Boolean(completed),
+                    remark: completed ? "" : String(existing.remark || "")
+                };
+                dirtyRoutes.add(v.route);
+            });
+
+            renderVehicles();
+            showToast(
+                completed 
+                    ? `☑ Selected ${targetVehicles.length} filtered vehicle(s).` 
+                    : `☐ Cleared ${targetVehicles.length} filtered vehicle(s).`,
+                completed ? "success" : ""
+            );
+        }
+
+        /* DEDUPLICATED PERSON FILTER (FIXED) */
+        function populatePeople() {
+            personFilter.innerHTML = '<option value="all">All Persons</option>';
+            whatsappPersonFilter.innerHTML = '<option value="all">All Persons</option>';
+
+            // Extract unique, non-empty names
+            const uniquePeople = [...new Set(VEHICLES.map(v => v.person && v.person.trim()).filter(Boolean))].sort();
+
+            uniquePeople.forEach(person => {
+                const opt1 = document.createElement("option");
+                opt1.value = person;
+                opt1.textContent = person;
+                personFilter.appendChild(opt1);
+
+                const opt2 = document.createElement("option");
+                opt2.value = person;
+                opt2.textContent = person;
+                whatsappPersonFilter.appendChild(opt2);
+            });
+        }
+
         /* SAVE DAY TO FIRESTORE */
         async function saveDay() {
             const pending = VEHICLES.filter(v => !(selectedDayData[v.route] && selectedDayData[v.route].completed === true));
@@ -1742,7 +1346,6 @@ const firebaseConfig = {
 
             if (missingRemarks.length > 0) {
                 showToast(`Enter remarks for ${missingRemarks.length} pending vehicle(s).`, "error");
-                scrollToVehicle(missingRemarks[0].route);
                 return;
             }
 
@@ -1756,30 +1359,13 @@ const firebaseConfig = {
                 }, { merge: true });
 
                 dirtyRoutes.clear();
-                showToast(isCompleteSelectedDay() ? `🎉 All ${VEHICLES.length} vehicles completed and saved!` : "Daily data saved successfully.", "success");
+                showToast("Daily data saved successfully.", "success");
                 await loadCalendarStatus();
             } catch (err) {
                 console.error(err);
-                showToast("Unable to save data. Check Firebase permissions.", "error");
+                showToast("Unable to save data.", "error");
             } finally {
                 showLoading(false);
-            }
-        }
-
-        function isCompleteSelectedDay() {
-            return VEHICLES.every(v => selectedDayData[v.route] && selectedDayData[v.route].completed === true);
-        }
-
-        function scrollToVehicle(route) {
-            const cards = document.querySelectorAll(".vehicle-card");
-            for (const card of cards) {
-                const number = card.querySelector(".vehicle-number");
-                if (number && number.textContent.trim() === route) {
-                    card.scrollIntoView({ behavior: "smooth", block: "center" });
-                    const remark = card.querySelector(".remark-input");
-                    if (remark) setTimeout(() => remark.focus(), 350);
-                    break;
-                }
             }
         }
 
@@ -1802,7 +1388,7 @@ const firebaseConfig = {
             }
         }
 
-        /* WHATSAPP GENERATION */
+        /* WHATSAPP MESSAGE BUILDER */
         function generateWhatsAppMessage(person = whatsappPerson) {
             const targetVehicles = person === "all" ? VEHICLES : VEHICLES.filter(v => v.person === person);
             const completed = targetVehicles.filter(v => selectedDayData[v.route] && selectedDayData[v.route].completed === true);
@@ -1869,41 +1455,10 @@ const firebaseConfig = {
             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
         }
 
-        function populatePeople() {
-            const people = [...new Set(VEHICLES.map(v => v.person))];
-            people.forEach(person => {
-                const opt1 = document.createElement("option");
-                opt1.value = person; opt1.textContent = person;
-                personFilter.appendChild(opt1);
-
-                const opt2 = document.createElement("option");
-                opt2.value = person; opt2.textContent = person;
-                whatsappPersonFilter.appendChild(opt2);
-            });
-        }
-
-        function setAllVehicles(completed) {
-            VEHICLES.forEach(v => {
-                const existing = selectedDayData[v.route] || {};
-                selectedDayData[v.route] = {
-                    completed: Boolean(completed),
-                    remark: completed ? "" : String(existing.remark || "")
-                };
-                dirtyRoutes.add(v.route);
-            });
-            renderVehicles();
-            showToast(completed ? `☑ All ${VEHICLES.length} vehicles selected.` : `☐ All ${VEHICLES.length} vehicles cleared.`, completed ? "success" : "");
-        }
-
-        /* EVENT BINDINGS */
+        /* EVENT LISTENERS */
         document.getElementById("previousMonth").addEventListener("click", async () => {
             const previous = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
-            const minimum = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), 1);
-
-            if (previous < minimum) {
-                showToast("Calendar starts from 15 September 2026.");
-                return;
-            }
+            if (previous < new Date(START_DATE.getFullYear(), START_DATE.getMonth(), 1)) return;
             calendarMonth = previous;
             await loadCalendarStatus();
         });
@@ -1928,8 +1483,11 @@ const firebaseConfig = {
 
         document.getElementById("saveButton").addEventListener("click", saveDay);
         document.getElementById("resetButton").addEventListener("click", resetDay);
-        selectAllButton.addEventListener("click", () => setAllVehicles(true));
-        clearAllButton.addEventListener("click", () => setAllVehicles(false));
+        
+        /* Fixed Select All / Clear All bindings */
+        selectAllButton.addEventListener("click", () => setFilteredVehiclesState(true));
+        clearAllButton.addEventListener("click", () => setFilteredVehiclesState(false));
+
         document.getElementById("whatsappButton").addEventListener("click", openWhatsAppModal);
         document.getElementById("copyButton").addEventListener("click", copyMessage);
         document.getElementById("modalCopyButton").addEventListener("click", copyMessage);
@@ -1943,7 +1501,6 @@ const firebaseConfig = {
         function closeModal() { whatsappModal.classList.remove("show"); }
         document.getElementById("closeModal").addEventListener("click", closeModal);
         document.getElementById("modalCloseButton").addEventListener("click", closeModal);
-        whatsappModal.addEventListener("click", e => { if (e.target === whatsappModal) closeModal(); });
 
         searchInput.addEventListener("input", renderVehicles);
         statusFilter.addEventListener("change", renderVehicles);
