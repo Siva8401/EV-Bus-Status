@@ -2783,18 +2783,24 @@ textarea {
 
 </select>
 
+
 <button
-    class="btn btn-secondary"
+    class="btn btn-primary"
     id="selectAllButton"
     type="button">
+
     ☑ Select All
+
 </button>
+
 
 <button
     class="btn btn-secondary"
     id="clearAllButton"
     type="button">
+
     ☐ Clear All
+
 </button>
 
 
@@ -2905,6 +2911,40 @@ textarea {
 
 <div class="modal-body">
 
+    <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+        margin-bottom:12px;
+        flex-wrap:wrap;
+    ">
+
+        <label
+            for="whatsappPersonFilter"
+            style="
+                font-size:11px;
+                font-weight:800;
+                color:#172033;
+            ">
+
+            Message For:
+
+        </label>
+
+
+        <select
+            class="filter"
+            id="whatsappPersonFilter">
+
+            <option value="all">
+                All Persons
+            </option>
+
+        </select>
+
+    </div>
+
+
     <div
         class="message-preview"
         id="messagePreview">
@@ -2994,7 +3034,6 @@ import {
     getDoc,
     onSnapshot,
     deleteDoc,
-    updateDoc,
     serverTimestamp
 } from
 "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -3360,14 +3399,18 @@ let unsubscribeDay =
 let currentUser =
     null;
 
-let dirtyRoutes =
+
+/*
+   Tracks local edits that have not yet been saved.
+   This prevents a real-time Firestore refresh from
+   replacing text while the user is editing remarks.
+*/
+const dirtyRoutes =
     new Set();
+
 
 let whatsappPerson =
     "all";
-
-let peoplePopulated =
-    false;
 
 
 /* =========================================================
@@ -3499,19 +3542,16 @@ const personFilter =
         "personFilter"
     );
 
+
 const selectAllButton =
     document.getElementById(
         "selectAllButton"
     );
 
+
 const clearAllButton =
     document.getElementById(
         "clearAllButton"
-    );
-
-const whatsappPersonFilter =
-    document.getElementById(
-        "whatsappPersonFilter"
     );
 
 
@@ -3524,6 +3564,12 @@ const dateTooltip =
 const whatsappModal =
     document.getElementById(
         "whatsappModal"
+    );
+
+
+const whatsappPersonFilter =
+    document.getElementById(
+        "whatsappPersonFilter"
     );
 
 
@@ -3816,6 +3862,7 @@ function subscribeToSelectedDay() {
     selectedDayData =
         {};
 
+
     dirtyRoutes.clear();
 
 
@@ -3825,34 +3872,47 @@ function subscribeToSelectedDay() {
 
             snapshot => {
 
-                if(snapshot.exists()) {
+                const remoteVehicles =
+                    snapshot.exists()
+                        ? (
+                            snapshot.data().vehicles ||
+                            {}
+                        )
+                        : {};
 
-                    const data =
-                        snapshot.data();
 
-                    const remoteVehicles =
-                        data.vehicles || {};
+                const localDirtyData =
+                    {};
 
-                    const localDirtyData = {};
 
-                    dirtyRoutes.forEach(route => {
-                        if (selectedDayData[route]) {
-                            localDirtyData[route] =
-                                selectedDayData[route];
+                dirtyRoutes.forEach(
+                    route => {
+
+                        if(
+                            selectedDayData[
+                                route
+                            ]
+                        ) {
+
+                            localDirtyData[
+                                route
+                            ] =
+                                selectedDayData[
+                                    route
+                                ];
+
                         }
-                    });
 
-                    selectedDayData = {
+                    }
+                );
+
+
+                selectedDayData =
+                    {
                         ...remoteVehicles,
                         ...localDirtyData
                     };
 
-                } else {
-
-                    selectedDayData =
-                        {};
-
-                }
 
                 renderVehicles();
 
@@ -4336,7 +4396,7 @@ function buildTooltip(
     data
 ) {
 
-    const pending =
+    const pendingCount =
         VEHICLES.filter(
             vehicle => {
 
@@ -4351,11 +4411,11 @@ function buildTooltip(
                 );
 
             }
-        );
+        ).length;
 
 
     if(
-        pending.length === 0
+        pendingCount === 0
     ) {
 
         dateTooltip.innerHTML = `
@@ -4365,7 +4425,7 @@ function buildTooltip(
             </div>
 
             <div>
-                ✅ All 45 vehicles completed.
+                ✅ All ${VEHICLES.length} vehicles completed.
             </div>
 
         `;
@@ -4375,70 +4435,18 @@ function buildTooltip(
     }
 
 
-    let html = `
+    dateTooltip.innerHTML = `
 
         <div class="tooltip-title">
             ${displayDate(date)}
         </div>
 
-        <div style="margin-bottom:5px;">
-            ⏳ ${pending.length} pending vehicle(s)
+        <div>
+            ⏳ Pending Vehicles:
+            <strong>${pendingCount}</strong>
         </div>
 
     `;
-
-
-    pending.forEach(
-        vehicle => {
-
-            const item =
-                data[
-                    vehicle.route
-                ] || {};
-
-            const remark =
-                item.remark &&
-                item.remark.trim()
-                    ? item.remark.trim()
-                    : "Remark not entered";
-
-
-            html += `
-
-                <div class="tooltip-item">
-
-                    <div class="tooltip-route">
-
-                        ${vehicle.operator}
-                        ·
-                        ${vehicle.route}
-
-                    </div>
-
-                    <div class="tooltip-person">
-
-                        👤
-                        ${vehicle.person}
-
-                    </div>
-
-                    <div class="tooltip-remark">
-
-                        📝
-                        ${escapeHTML(remark)}
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-    );
-
-
-    dateTooltip.innerHTML =
-        html;
 
 }
 
@@ -4884,6 +4892,13 @@ function renderVehicles() {
                                 remark.value
                             );
 
+
+                            /*
+                               Re-render only when the checkbox
+                               status changes.
+                            */
+                            renderVehicles();
+
                         }
                     );
 
@@ -4892,6 +4907,12 @@ function renderVehicles() {
                         "input",
                         () => {
 
+                            /*
+                               IMPORTANT:
+                               Do not re-render while typing.
+                               Re-rendering destroys the textarea,
+                               which makes the cursor/text jump.
+                            */
                             updateLocalVehicle(
                                 vehicle.route,
                                 checkbox.checked,
@@ -4962,14 +4983,15 @@ function updateLocalVehicle(
 
         remark:
             String(
-                remark || ""
-            ).trim()
+                remark ?? ""
+            )
 
     };
 
-    dirtyRoutes.add(route);
 
-    renderVehicles();
+    dirtyRoutes.add(
+        route
+    );
 
 }
 
@@ -4978,7 +5000,7 @@ function updateLocalVehicle(
    SAVE DAY TO FIRESTORE
 ========================================================= */
 
-async function saveDay() {
+async async function saveDay() {
 
     const pending =
         VEHICLES.filter(
@@ -4988,6 +5010,7 @@ async function saveDay() {
                     selectedDayData[
                         vehicle.route
                     ];
+
 
                 return !(
                     item &&
@@ -5006,6 +5029,7 @@ async function saveDay() {
                     selectedDayData[
                         vehicle.route
                     ];
+
 
                 return !(
                     item &&
@@ -5026,9 +5050,11 @@ async function saveDay() {
             "error"
         );
 
+
         scrollToVehicle(
             missingRemarks[0].route
         );
+
 
         return;
 
@@ -5037,13 +5063,22 @@ async function saveDay() {
 
     try {
 
-        showLoading(true);
+        showLoading(
+            true
+        );
+
 
         await setDoc(
             dayRef(selectedDate),
             {
+
                 date:
-                    dateKey(selectedDate),
+                    dateKey(
+                        selectedDate
+                    ),
+
+                vehicles:
+                    selectedDayData,
 
                 updatedAt:
                     serverTimestamp(),
@@ -5052,71 +5087,28 @@ async function saveDay() {
                     currentUser
                         ? currentUser.email
                         : ""
+
             },
             {
-                merge: true
+                merge:
+                    true
             }
         );
-
-
-        const updates = {};
-
-        VEHICLES.forEach(vehicle => {
-
-            const item =
-                selectedDayData[
-                    vehicle.route
-                ];
-
-            if(!item) {
-                return;
-            }
-
-            updates[
-                `vehicles.${vehicle.route}`
-            ] = {
-                completed:
-                    item.completed === true,
-
-                remark:
-                    String(
-                        item.remark || ""
-                    ).trim()
-            };
-
-        });
-
-
-        if(
-            Object.keys(updates).length > 0
-        ) {
-
-            updates.updatedAt =
-                serverTimestamp();
-
-            updates.updatedBy =
-                currentUser
-                    ? currentUser.email
-                    : "";
-
-            await updateDoc(
-                dayRef(selectedDate),
-                updates
-            );
-
-        }
 
 
         dirtyRoutes.clear();
 
+
         showToast(
             isCompleteSelectedDay()
-                ? "🎉 All 45 vehicles completed and saved!"
+                ? `🎉 All ${VEHICLES.length} vehicles completed and saved!`
                 : "Daily data saved successfully.",
             "success"
         );
 
+
         await loadCalendarStatus();
+
 
     } catch(error) {
 
@@ -5129,7 +5121,9 @@ async function saveDay() {
 
     } finally {
 
-        showLoading(false);
+        showLoading(
+            false
+        );
 
     }
 
@@ -5254,6 +5248,9 @@ async function resetDay() {
             {};
 
 
+        dirtyRoutes.clear();
+
+
         showToast(
             "Day reset successfully.",
             "success"
@@ -5283,24 +5280,23 @@ async function resetDay() {
 ========================================================= */
 
 function generateWhatsAppMessage(
-    selectedPerson = whatsappPerson
+    person = whatsappPerson
 ) {
 
-    const scope =
-        selectedPerson || "all";
-
-    const inScope =
-        vehicle =>
-            scope === "all" ||
-            vehicle.person === scope;
+    const targetVehicles =
+        person === "all"
+            ? VEHICLES
+            : VEHICLES.filter(
+                vehicle =>
+                    vehicle.person === person
+            );
 
 
     const completed =
-        VEHICLES.filter(
+        targetVehicles.filter(
             vehicle => {
 
                 return (
-                    inScope(vehicle) &&
                     selectedDayData[
                         vehicle.route
                     ] &&
@@ -5314,19 +5310,16 @@ function generateWhatsAppMessage(
 
 
     const pending =
-        VEHICLES.filter(
+        targetVehicles.filter(
             vehicle => {
 
-                return (
-                    inScope(vehicle) &&
-                    !(
-                        selectedDayData[
-                            vehicle.route
-                        ] &&
-                        selectedDayData[
-                            vehicle.route
-                        ].completed === true
-                    )
+                return !(
+                    selectedDayData[
+                        vehicle.route
+                    ] &&
+                    selectedDayData[
+                        vehicle.route
+                    ].completed === true
                 );
 
             }
@@ -5335,42 +5328,54 @@ function generateWhatsAppMessage(
 
     const ekaCompleted =
         completed.filter(
-            v => v.operator === "EKA"
+            v =>
+                v.operator === "EKA"
         );
 
 
     const olectraCompleted =
         completed.filter(
-            v => v.operator === "OLECTRA"
+            v =>
+                v.operator === "OLECTRA"
         );
 
 
     const ekaPending =
         pending.filter(
-            v => v.operator === "EKA"
+            v =>
+                v.operator === "EKA"
         );
 
 
     const olectraPending =
         pending.filter(
-            v => v.operator === "OLECTRA"
+            v =>
+                v.operator === "OLECTRA"
         );
 
 
     let message =
-        `Date: ${displayDate(selectedDate)}\n\n`;
+        `Date: ${displayDate(selectedDate)}
+
+`;
 
 
-    if(scope !== "all") {
+    if(
+        person !== "all"
+    ) {
 
         message +=
-            `Person: ${scope}\n\n`;
+            `Person: ${person}
+
+`;
 
     }
 
 
     message +=
-        `COMPLETED:\n\n`;
+        `COMPLETED:
+
+`;
 
 
     message +=
@@ -5380,7 +5385,9 @@ function generateWhatsAppMessage(
                     .map(v => v.route)
                     .join(", ")
                 : "-"
-        }\n\n`;
+        }
+
+`;
 
 
     message +=
@@ -5398,7 +5405,11 @@ function generateWhatsAppMessage(
     ) {
 
         message +=
-            `\n\nPENDING:\n\n`;
+            `
+
+PENDING:
+
+`;
 
 
         if(
@@ -5406,7 +5417,8 @@ function generateWhatsAppMessage(
         ) {
 
             message +=
-                `EKA:\n`;
+                `EKA:
+`;
 
 
             ekaPending.forEach(
@@ -5420,15 +5432,16 @@ function generateWhatsAppMessage(
 
                     message +=
                         `• ${vehicle.route} - ` +
-                        `${vehicle.person} - ` +
-                        `${item.remark || "Remark not entered"}\n`;
+                        `${item.remark || "Remark not entered"}
+`;
 
                 }
             );
 
 
             message +=
-                `\n`;
+                `
+`;
 
         }
 
@@ -5438,7 +5451,8 @@ function generateWhatsAppMessage(
         ) {
 
             message +=
-                `OLECTRA:\n`;
+                `OLECTRA:
+`;
 
 
             olectraPending.forEach(
@@ -5452,8 +5466,8 @@ function generateWhatsAppMessage(
 
                     message +=
                         `• ${vehicle.route} - ` +
-                        `${vehicle.person} - ` +
-                        `${item.remark || "Remark not entered"}\n`;
+                        `${item.remark || "Remark not entered"}
+`;
 
                 }
             );
@@ -5474,8 +5488,14 @@ function generateWhatsAppMessage(
 
 function openWhatsAppModal() {
 
+    whatsappPersonFilter.value =
+        whatsappPerson;
+
+
     messagePreview.textContent =
-        generateWhatsAppMessage();
+        generateWhatsAppMessage(
+            whatsappPerson
+        );
 
 
     whatsappModal.classList.add(
@@ -5492,7 +5512,9 @@ function openWhatsAppModal() {
 async function copyMessage() {
 
     const message =
-        generateWhatsAppMessage(whatsappPerson);
+        generateWhatsAppMessage(
+            whatsappPerson
+        );
 
 
     try {
@@ -5552,7 +5574,9 @@ async function copyMessage() {
 function openWhatsApp() {
 
     const message =
-        generateWhatsAppMessage(whatsappPerson);
+        generateWhatsAppMessage(
+            whatsappPerson
+        );
 
 
     const url =
@@ -5576,10 +5600,6 @@ function openWhatsApp() {
 
 function populatePeople() {
 
-    if(peoplePopulated) {
-        return;
-    }
-
     const people =
         [
             ...new Set(
@@ -5598,11 +5618,14 @@ function populatePeople() {
                     "option"
                 );
 
+
             option.value =
                 person;
 
+
             option.textContent =
                 person;
+
 
             personFilter.appendChild(
                 option
@@ -5614,11 +5637,14 @@ function populatePeople() {
                     "option"
                 );
 
+
             whatsappOption.value =
                 person;
 
+
             whatsappOption.textContent =
                 person;
+
 
             whatsappPersonFilter.appendChild(
                 whatsappOption
@@ -5627,7 +5653,67 @@ function populatePeople() {
         }
     );
 
-    peoplePopulated = true;
+}
+
+
+/* =========================================================
+   SELECT ALL / CLEAR ALL
+========================================================= */
+
+function setAllVehicles(
+    completed
+) {
+
+    VEHICLES.forEach(
+        vehicle => {
+
+            const existing =
+                selectedDayData[
+                    vehicle.route
+                ] || {};
+
+
+            selectedDayData[
+                vehicle.route
+            ] = {
+
+                completed:
+                    Boolean(completed),
+
+                /*
+                   Selecting all clears old pending
+                   remarks. Clearing all keeps existing
+                   remarks so they are not lost.
+                */
+                remark:
+                    completed
+                        ? ""
+                        : String(
+                            existing.remark || ""
+                        )
+
+            };
+
+
+            dirtyRoutes.add(
+                vehicle.route
+            );
+
+        }
+    );
+
+
+    renderVehicles();
+
+
+    showToast(
+        completed
+            ? `☑ All ${VEHICLES.length} vehicles selected.`
+            : `☐ All ${VEHICLES.length} vehicles cleared.`,
+        completed
+            ? "success"
+            : ""
+    );
 
 }
 
@@ -5760,80 +5846,6 @@ document.getElementById(
 
 
 /* =========================================================
-   SELECT / CLEAR ALL
-========================================================= */
-
-function setAllVehiclesCompleted(
-    completed
-) {
-
-    VEHICLES.forEach(
-        vehicle => {
-
-            const existing =
-                selectedDayData[
-                    vehicle.route
-                ] || {};
-
-            updateLocalVehicle(
-                vehicle.route,
-                completed,
-                existing.remark || ""
-            );
-
-        }
-    );
-
-    showToast(
-        completed
-            ? "All 45 vehicles selected."
-            : "All 45 vehicles cleared.",
-        completed
-            ? "success"
-            : ""
-    );
-
-}
-
-
-selectAllButton.addEventListener(
-    "click",
-    () => {
-        setAllVehiclesCompleted(true);
-    }
-);
-
-
-clearAllButton.addEventListener(
-    "click",
-    () => {
-        setAllVehiclesCompleted(false);
-    }
-);
-
-
-/* =========================================================
-   WHATSAPP PERSON SELECTION
-========================================================= */
-
-whatsappPersonFilter.addEventListener(
-    "change",
-    () => {
-
-        whatsappPerson =
-            whatsappPersonFilter.value ||
-            "all";
-
-        messagePreview.textContent =
-            generateWhatsAppMessage(
-                whatsappPerson
-            );
-
-    }
-);
-
-
-/* =========================================================
    BUTTONS
 ========================================================= */
 
@@ -5850,6 +5862,30 @@ document.getElementById(
 ).addEventListener(
     "click",
     resetDay
+);
+
+
+selectAllButton.addEventListener(
+    "click",
+    () => {
+
+        setAllVehicles(
+            true
+        );
+
+    }
+);
+
+
+clearAllButton.addEventListener(
+    "click",
+    () => {
+
+        setAllVehicles(
+            false
+        );
+
+    }
 );
 
 
@@ -5882,6 +5918,23 @@ document.getElementById(
 ).addEventListener(
     "click",
     openWhatsApp
+);
+
+
+whatsappPersonFilter.addEventListener(
+    "change",
+    () => {
+
+        whatsappPerson =
+            whatsappPersonFilter.value;
+
+
+        messagePreview.textContent =
+            generateWhatsAppMessage(
+                whatsappPerson
+            );
+
+    }
 );
 
 
