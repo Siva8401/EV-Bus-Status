@@ -1127,6 +1127,7 @@
         }
 
         /* CALENDAR RENDERER */
+        /* CALENDAR RENDERER (WITH HOVER TOOLTIP) */
         function renderCalendar() {
             calendarGrid.innerHTML = "";
             const year = calendarMonth.getFullYear();
@@ -1162,11 +1163,31 @@
                 `;
 
                 if (!beforeStart(date)) {
+                    // Click Event
                     cell.addEventListener("click", () => {
                         selectedDate = new Date(date);
                         calendarMonth = new Date(date.getFullYear(), date.getMonth(), 1);
                         subscribeToSelectedDay();
                         loadCalendarStatus();
+                    });
+
+                    // Mouse Enter Event (Show Tooltip)
+                    cell.addEventListener("mouseenter", (e) => {
+                        const dateStr = displayDate(date);
+                        const statusText = complete ? "Status: All Vehicles Completed" : "Status: Vehicles Pending";
+                        dateTooltip.innerHTML = `<strong>${dateStr}</strong><br>${statusText}`;
+                        dateTooltip.classList.add("visible");
+                    });
+
+                    // Mouse Move Event (Track Cursor Position)
+                    cell.addEventListener("mousemove", (e) => {
+                        dateTooltip.style.left = `${e.clientX + 12}px`;
+                        dateTooltip.style.top = `${e.clientY + 12}px`;
+                    });
+
+                    // Mouse Leave Event (Hide Tooltip)
+                    cell.addEventListener("mouseleave", () => {
+                        dateTooltip.classList.remove("visible");
                     });
                 }
 
