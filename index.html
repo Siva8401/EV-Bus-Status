@@ -1171,29 +1171,32 @@
                         loadCalendarStatus();
                     });
 
-                   // Mouse Enter Event (Show Tooltip with Counts)
-                    cell.addEventListener("mouseenter", (e) => {
-                        const dateStr = displayDate(date);
-                        
-                        // Retrieve vehicles/data for this date (adjust function/variable name if different in your code)
-                        const dayVehicles = getVehiclesForDate ? getVehiclesForDate(date) : [];
-                        
-                        // Calculate counts
-                        const completedCount = dayVehicles.filter(v => v.status === "DONE" || v.completed).length;
-                        const pendingCount = dayVehicles.length - completedCount;
+                    // Mouse Enter Event (Show Tooltip)
+cell.addEventListener("mouseenter", (e) => {
+    const dateStr = displayDate(date);
+    
+    // Check if the current hovered date is the one currently loaded in memory
+    let completedCount = 0;
+    let pendingCount = 0;
 
-                        // Format numbers with leading zeros (e.g., 01, 09, 44)
-                        const fmtCompleted = String(completedCount).padStart(2, '0');
-                        const fmtPending = String(pendingCount).padStart(2, '0');
+    if (sameDay(date, selectedDate) && selectedDayData) {
+        const vehicles = Object.values(selectedDayData);
+        completedCount = vehicles.filter(v => v.status === "DONE" || v.completed).length;
+        pendingCount = vehicles.length - completedCount;
+    }
 
-                        // Set Tooltip Content
-                        dateTooltip.innerHTML = `
-                            <strong>${dateStr}</strong><br>
-                            ${fmtCompleted} Completed<br>
-                            ${fmtPending} Pending
-                        `;
-                        dateTooltip.classList.add("visible");
-                    });
+    const fmtCompleted = String(completedCount).padStart(2, '0');
+    const fmtPending = String(pendingCount).padStart(2, '0');
+
+    if (dateTooltip) {
+        dateTooltip.innerHTML = `
+            <strong>${dateStr}</strong><br>
+            ${fmtCompleted} Completed<br>
+            ${fmtPending} Pending
+        `;
+        dateTooltip.classList.add("visible");
+    }
+});
 
                     // Mouse Move Event (Track Cursor Position)
                     cell.addEventListener("mousemove", (e) => {
