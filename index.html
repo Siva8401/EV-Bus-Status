@@ -667,18 +667,61 @@
         .toast.success { background: var(--green-dark); }
         .toast.error { background: var(--red-dark); }
 
-        @media (max-width: 1024px) {
-            .workspace { grid-template-columns: 1fr; }
-            .calendar-panel { position: static; }
-            .vehicle-list { max-height: none; }
-        }
+@media (max-width: 1024px) {
+    .workspace { grid-template-columns: 1fr; }
+    .calendar-panel { position: static; }
+    .vehicle-list { max-height: none; }
+}
 
-        @media (max-width: 640px) {
-            .main { padding: 12px; }
-            .summary { grid-template-columns: repeat(2, 1fr); }
-            .toolbar, .action-bar { flex-direction: column; align-items: stretch; }
-            .btn { width: 100%; }
-        }
+@media (max-width: 640px) {
+    .main { padding: 12px; }
+    
+    /* Responsive Header Adjustments */
+    .header-inner {
+        padding: 10px 14px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .brand {
+        gap: 10px;
+    }
+
+    .brand-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 18px;
+    }
+
+    .brand h1 {
+        font-size: 15px;
+    }
+
+    .brand p {
+        display: none; /* Hide subtitle on mobile for extra space */
+    }
+
+    .user-area {
+        gap: 8px;
+    }
+
+    .user-email {
+        display: none; /* Hide email address on small screens to prevent line overflow */
+    }
+
+    .user-name {
+        font-size: 12px;
+    }
+
+    .logout-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .summary { grid-template-columns: repeat(2, 1fr); }
+    .toolbar, .action-bar { flex-direction: column; align-items: stretch; }
+    .btn { width: 100%; }
+}
     </style>
 </head>
 
@@ -1097,33 +1140,35 @@
         }
 
         /* CALENDAR STATUS CACHING */
-        async function loadCalendarStatus() {
-            const year = calendarMonth.getFullYear();
-            const month = calendarMonth.getMonth();
-            const days = new Date(year, month + 1, 0).getDate();
-            calendarStatus = {};
+/* Corrected function snippet */
+async function loadCalendarStatus() {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const days = new Date(year, month + 1, 0).getDate();
+    calendarStatus = {};
 
-            const requests = [];
-            for (let day = 1; day <= days; day++) {
-                const date = new Date(year, month, day);
-                if (beforeStart(date)) continue;
+    const requests = [];
+    for (let day = 1; day <= days; day++) {
+        const date = new Date(year, month, day);
+        if (beforeStart(date)) continue;
 
-                requests.push(
-                    getDoc(dayRef(date)).then(snapshot => {
-                        if (!snapshot.exists()) {
-                            calendarStatus[dateKey(date)] = false;
-                            return;
-                        }
-                        const vehicles = snapshot.data().vehicles || {};
-                        calendarStatus[dateKey(date)] = VEHICLES.every(v => vehicles[v.route] && vehicles[v.route].completed === true);
-                    }).catch(() => {
-                        calendarStatus[dateKey(date)] = false;
-                    })
-                );
-            }
+        requests.push(
+            getDoc(dayRef(date)).then(snapshot => {
+                if (!snapshot.exists()) {
+                    calendarStatus[dateKey(date)] = false;
+                    return;
+                }
+                const vehicles = snapshot.data().vehicles || {};
+                calendarStatus[dateKey(date)] = VEHICLES.every(v => vehicles[v.route] && vehicles[v.route].completed === true);
+            }).catch(() => {
+                calendarStatus[dateKey(date)] = false;
+            })
+        );
+    }
 
-            await Promise.all(requests);
-        }
+    await Promise.all(requests);
+    renderCalendar(); // <-- Fixed: Call renderCalendar() here
+}
 
         /* CALENDAR RENDERER */
         /* CALENDAR RENDERER (WITH HOVER TOOLTIP) */
@@ -1178,12 +1223,12 @@ cell.addEventListener("mouseenter", (e) => {
     let completedCount = 0;
     let pendingCount = 0;
 
-    if (sameDay(date, selectedDate) && selectedDayData) {
-        const vehicles = Object.values(selectedDayData);
-        completedCount = vehicles.filter(v => v.status === "DONE" || v.completed).length;
-        pendingCount = vehicles.length - completedCount;
-    }
 
+    if (sameDay(date, selectedDate) && selectedDayData) {
+    const totalVehiclesCount = VEHICLES.length;
+    completedCount = VEHICLES.filter(v => selectedDayData[v.route] && selectedDayData[v.route].completed).length;
+    pendingCount = totalVehiclesCount - completedCount;
+}
     const fmtCompleted = String(completedCount).padStart(2, '0');
     const fmtPending = String(pendingCount).padStart(2, '0');
 
