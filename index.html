@@ -435,9 +435,7 @@
             outline: none;
         }
 
-        /* =========================================================
-           VEHICLE LIST & GRID LAYOUT (NEW ENHANCEMENTS)
-        ========================================================= */
+        /* VEHICLE LIST & GRID LAYOUT */
         .vehicle-list {
             padding: 20px 24px;
             max-height: calc(100vh - 380px);
@@ -476,7 +474,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Responsive Grid Container for Vehicle Cards */
         .vehicle-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1291,7 +1288,7 @@
             dirtyRoutes.add(route);
         }
 
-        /* FILTERED SELECT ALL / CLEAR ALL (FIXED) */
+        /* FILTERED SELECT ALL / CLEAR ALL */
         function setFilteredVehiclesState(completed) {
             const targetVehicles = getFilteredVehicles();
 
@@ -1318,12 +1315,11 @@
             );
         }
 
-        /* DEDUPLICATED PERSON FILTER (FIXED) */
+        /* DEDUPLICATED PERSON FILTER */
         function populatePeople() {
             personFilter.innerHTML = '<option value="all">All Persons</option>';
             whatsappPersonFilter.innerHTML = '<option value="all">All Persons</option>';
 
-            // Extract unique, non-empty names
             const uniquePeople = [...new Set(VEHICLES.map(v => v.person && v.person.trim()).filter(Boolean))].sort();
 
             uniquePeople.forEach(person => {
@@ -1339,9 +1335,12 @@
             });
         }
 
-        /* SAVE DAY TO FIRESTORE */
+        /* SAVE DAY TO FIRESTORE (UPDATED: ONLY VALIDATES FILTERED/VISIBLE VEHICLES) */
         async function saveDay() {
-            const pending = VEHICLES.filter(v => !(selectedDayData[v.route] && selectedDayData[v.route].completed === true));
+            const visibleVehicles = getFilteredVehicles();
+            const targetList = visibleVehicles.length > 0 ? visibleVehicles : VEHICLES;
+
+            const pending = targetList.filter(v => !(selectedDayData[v.route] && selectedDayData[v.route].completed === true));
             const missingRemarks = pending.filter(v => !(selectedDayData[v.route] && selectedDayData[v.route].remark && selectedDayData[v.route].remark.trim()));
 
             if (missingRemarks.length > 0) {
@@ -1484,7 +1483,6 @@
         document.getElementById("saveButton").addEventListener("click", saveDay);
         document.getElementById("resetButton").addEventListener("click", resetDay);
         
-        /* Fixed Select All / Clear All bindings */
         selectAllButton.addEventListener("click", () => setFilteredVehiclesState(true));
         clearAllButton.addEventListener("click", () => setFilteredVehiclesState(false));
 
