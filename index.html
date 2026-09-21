@@ -722,6 +722,11 @@
     .toolbar, .action-bar { flex-direction: column; align-items: stretch; }
     .btn { width: 100%; }
 }
+        @media (hover: none) and (pointer: coarse) {
+    .date-tooltip {
+        display: none !important;
+    }
+}
     </style>
 </head>
 
@@ -1132,15 +1137,15 @@
             });
         }
 
-        function isDayComplete(date) {
-            if (sameDay(date, selectedDate)) {
-                return VEHICLES.every(v => selectedDayData[v.route] && selectedDayData[v.route].completed === true);
-            }
-            return calendarStatus[dateKey(date)] === true;
-        }
+function isDayComplete(date) {
+    if (sameDay(date, selectedDate)) {
+        return VEHICLES.every(v => selectedDayData[v.route] && selectedDayData[v.route].completed === true);
+    }
+    const status = calendarStatus[dateKey(date)];
+    return status ? status.completed === VEHICLES.length : false;
+}
 
         /* CALENDAR STATUS CACHING */
-/* Corrected function snippet */
 async function loadCalendarStatus() {
     const year = calendarMonth.getFullYear();
     const month = calendarMonth.getMonth();
@@ -1155,19 +1160,23 @@ async function loadCalendarStatus() {
         requests.push(
             getDoc(dayRef(date)).then(snapshot => {
                 if (!snapshot.exists()) {
-                    calendarStatus[dateKey(date)] = false;
+                    calendarStatus[dateKey(date)] = { completed: 0, pending: VEHICLES.length };
                     return;
                 }
                 const vehicles = snapshot.data().vehicles || {};
-                calendarStatus[dateKey(date)] = VEHICLES.every(v => vehicles[v.route] && vehicles[v.route].completed === true);
+                const completedCount = VEHICLES.filter(v => vehicles[v.route] && vehicles[v.route].completed === true).length;
+                calendarStatus[dateKey(date)] = {
+                    completed: completedCount,
+                    pending: VEHICLES.length - completedCount
+                };
             }).catch(() => {
-                calendarStatus[dateKey(date)] = false;
+                calendarStatus[dateKey(date)] = { completed: 0, pending: VEHICLES.length };
             })
         );
     }
 
     await Promise.all(requests);
-    renderCalendar(); // <-- Fixed: Call renderCalendar() here
+    renderCalendar();
 }
 
         /* CALENDAR RENDERER */
@@ -1208,35 +1217,55 @@ async function loadCalendarStatus() {
 
                 if (!beforeStart(date)) {
                     // Click Event
-                    cell.addEventListener("click", () => {
-                        selectedDate = new Date(date);
-                        calendarMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-                        subscribeToSelectedDay();
-                        loadCalendarStatus();
-                    });
+    cell.addEventListener("click", () => {
+    // Hide tooltip immediately when a date is selected
+    if (dateTooltip) {
+        dateTooltip.classList.remove("visible");
+    }
+
+    selectedDate = new Date(date);
+    calendarMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    subscribeToSelectedDay();
+    loadCalendarStatus();
+});
 
                     // Mouse Enter Event (Show Tooltip)
+// Mouse Enter Event (Show Tooltip)
 cell.addEventListener("mouseenter", (e) => {
     const dateStr = displayDate(date);
+    const key = dateKey(date);
     
-    // Check if the current hovered date is the one currently loaded in memory
     let completedCount = 0;
     let pendingCount = 0;
 
-
+    // 1. Get exact counts
     if (sameDay(date, selectedDate) && selectedDayData) {
-    const totalVehiclesCount = VEHICLES.length;
-    completedCount = VEHICLES.filter(v => selectedDayData[v.route] && selectedDayData[v.route].completed).length;
-    pendingCount = totalVehiclesCount - completedCount;
-}
-    const fmtCompleted = String(completedCount).padStart(2, '0');
-    const fmtPending = String(pendingCount).padStart(2, '0');
+        completedCount = VEHICLES.filter(v => selectedDayData[v.route] && selectedDayData[v.route].completed).length;
+        pendingCount = VEHICLES.length - completedCount;
+    } else if (calendarStatus[key]) {
+        completedCount = calendarStatus[key].completed;
+        pendingCount = calendarStatus[key].pending;
+    } else {
+        completedCount = 0;
+        pendingCount = VEHICLES.length;
+    }
+
+    // 2. Format tooltip output based on counts
+    let tooltipBody = "";
+    if (completedCount === 0) {
+        // Case A: All Pending
+        tooltipBody = `${pad(pendingCount)} Pending`;
+    } else if (pendingCount === 0) {
+        // Case B: All Completed
+        tooltipBody = `${pad(completedCount)} Completed`;
+    } else {
+        // Case C: Mixed (e.g. 30 Pending / 15 Completed)
+        tooltipBody = `${pad(pendingCount)} Pending<br>${pad(completedCount)} Completed`;
+    }
 
     if (dateTooltip) {
         dateTooltip.innerHTML = `
-            <strong>${dateStr}</strong><br>
-            ${fmtCompleted} Completed<br>
-            ${fmtPending} Pending
+            <strong>${dateStr}</strong><br>${tooltipBody}
         `;
         dateTooltip.classList.add("visible");
     }
@@ -1583,6 +1612,12 @@ cell.addEventListener("mouseenter", (e) => {
         function closeModal() { whatsappModal.classList.remove("show"); }
         document.getElementById("closeModal").addEventListener("click", closeModal);
         document.getElementById("modalCloseButton").addEventListener("click", closeModal);
+
+        document.addEventListener("touchstart", (e) => {
+            if (dateTooltip && !e.target.closest(".calendar-day")) {
+                dateTooltip.classList.remove("visible");
+            }
+        });
 
         searchInput.addEventListener("input", renderVehicles);
         statusFilter.addEventListener("change", renderVehicles);
